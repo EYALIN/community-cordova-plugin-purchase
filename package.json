@@ -1,0 +1,55 @@
+{
+  "name": "community-cordova-plugin-purchase",
+  "version": "1.0.0",
+  "description": "Community Cordova In-App Purchase Plugin for iOS (AppStore), Android (PlayStore) and Windows",
+  "main": "./www/store.js",
+  "types": "./www/store.d.ts",
+  "cordova": {
+    "id": "community-cordova-plugin-purchase",
+    "platforms": [
+      "android",
+      "ios",
+      "browser"
+    ]
+  },
+  "readme": "README.md",
+  "repository": "EYALIN/community-cordova-plugin-purchase",
+  "homepage": "https://github.com/EYALIN/community-cordova-plugin-purchase",
+  "funding": "https://github.com/sponsors/EYALIN",
+  "bugs": "https://github.com/EYALIN/community-cordova-plugin-purchase/issues",
+  "keywords": [
+    "ecosystem:cordova",
+    "cordova-android",
+    "cordova-ios",
+    "cordova-windows",
+    "cordova",
+    "phonegap",
+    "purchase",
+    "in-app-purchase",
+    "iap",
+    "storekit",
+    "billing",
+    "ios",
+    "android",
+    "play",
+    "appstore",
+    "subscriptions",
+    "consumables"
+  ],
+  "scripts": {
+    "test": "npm run lint",
+    "lint": "eslint ."
+  },
+  "author": "EYALIN",
+  "license": "MIT",
+  "engines": {
+    "cordovaDependencies": {
+      "1.0.0": {
+        "cordova": ">100"
+      }
+    }
+  },
+  "devDependencies": {
+    "@cordova/eslint-config": "^3.0.0"
+  }
+}
