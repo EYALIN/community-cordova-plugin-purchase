@@ -1,71 +1,70 @@
-/// <reference path="../src/ts/platforms/iaptic-js/iaptic-js-types.d.ts" />
 declare namespace CdvPurchase {
     /**
      * Error codes
      */
     enum ErrorCode {
         /** Error: Failed to intialize the in-app purchase library */
-        SETUP,
+        SETUP = 6777001,
         /** Error: Failed to load in-app products metadata */
-        LOAD,
+        LOAD = 6777002,
         /** Error: Failed to make a purchase */
-        PURCHASE,
+        PURCHASE = 6777003,
         /** Error: Failed to load the purchase receipt */
-        LOAD_RECEIPTS,
+        LOAD_RECEIPTS = 6777004,
         /** Error: Client is not allowed to issue the request */
-        CLIENT_INVALID,
+        CLIENT_INVALID = 6777005,
         /** Error: Purchase flow has been cancelled by user */
-        PAYMENT_CANCELLED,
+        PAYMENT_CANCELLED = 6777006,
         /** Error: Something is suspicious about a purchase */
-        PAYMENT_INVALID,
+        PAYMENT_INVALID = 6777007,
         /** Error: The user is not allowed to make a payment */
-        PAYMENT_NOT_ALLOWED,
+        PAYMENT_NOT_ALLOWED = 6777008,
         /** Error: Unknown error */
-        UNKNOWN,
+        UNKNOWN = 6777010,
         /** Error: Failed to refresh the purchase receipt */
-        REFRESH_RECEIPTS,
+        REFRESH_RECEIPTS = 6777011,
         /** Error: The product identifier is invalid */
-        INVALID_PRODUCT_ID,
+        INVALID_PRODUCT_ID = 6777012,
         /** Error: Cannot finalize a transaction or acknowledge a purchase */
-        FINISH,
+        FINISH = 6777013,
         /** Error: Failed to communicate with the server */
-        COMMUNICATION,
+        COMMUNICATION = 6777014,
         /** Error: Subscriptions are not available */
-        SUBSCRIPTIONS_NOT_AVAILABLE,
+        SUBSCRIPTIONS_NOT_AVAILABLE = 6777015,
         /** Error: Purchase information is missing token */
-        MISSING_TOKEN,
+        MISSING_TOKEN = 6777016,
         /** Error: Verification of store data failed */
-        VERIFICATION_FAILED,
+        VERIFICATION_FAILED = 6777017,
         /** Error: Bad response from the server */
-        BAD_RESPONSE,
+        BAD_RESPONSE = 6777018,
         /** Error: Failed to refresh the store */
-        REFRESH,
+        REFRESH = 6777019,
         /** Error: Payment has expired */
-        PAYMENT_EXPIRED,
+        PAYMENT_EXPIRED = 6777020,
         /** Error: Failed to download the content */
-        DOWNLOAD,
+        DOWNLOAD = 6777021,
         /** Error: Failed to update a subscription */
-        SUBSCRIPTION_UPDATE_NOT_AVAILABLE,
+        SUBSCRIPTION_UPDATE_NOT_AVAILABLE = 6777022,
         /** Error: The requested product is not available in the store. */
-        PRODUCT_NOT_AVAILABLE,
+        PRODUCT_NOT_AVAILABLE = 6777023,
         /** Error: The user has not allowed access to Cloud service information */
-        CLOUD_SERVICE_PERMISSION_DENIED,
+        CLOUD_SERVICE_PERMISSION_DENIED = 6777024,
         /** Error: The device could not connect to the network. */
-        CLOUD_SERVICE_NETWORK_CONNECTION_FAILED,
+        CLOUD_SERVICE_NETWORK_CONNECTION_FAILED = 6777025,
         /** Error: The user has revoked permission to use this cloud service. */
-        CLOUD_SERVICE_REVOKED,
+        CLOUD_SERVICE_REVOKED = 6777026,
         /** Error: The user has not yet acknowledged Apple’s privacy policy */
-        PRIVACY_ACKNOWLEDGEMENT_REQUIRED,
+        PRIVACY_ACKNOWLEDGEMENT_REQUIRED = 6777027,
         /** Error: The app is attempting to use a property for which it does not have the required entitlement. */
-        UNAUTHORIZED_REQUEST_DATA,
+        UNAUTHORIZED_REQUEST_DATA = 6777028,
         /** Error: The offer identifier is invalid. */
-        INVALID_OFFER_IDENTIFIER,
+        INVALID_OFFER_IDENTIFIER = 6777029,
         /** Error: The price you specified in App Store Connect is no longer valid. */
-        INVALID_OFFER_PRICE,
+        INVALID_OFFER_PRICE = 6777030,
         /** Error: The signature in a payment discount is not valid. */
-        INVALID_SIGNATURE,
+        INVALID_SIGNATURE = 6777031,
         /** Error: Parameters are missing in a payment discount. */
-        MISSING_OFFER_PARAMS,
+        MISSING_OFFER_PARAMS = 6777032,
         /**
          * Server code used when a subscription expired.
          *
@@ -1071,6 +1070,18 @@ declare namespace CdvPurchase {
             platform?: Platform;
         } | string): boolean;
         /**
+         * Check ownership status from verified receipts only.
+         *
+         * This is useful for iOS where StoreKit 1 doesn't automatically provide subscription
+         * transaction data on app restart. After calling restorePurchases() and waiting for
+         * receiptsVerified event, this method can be used to check if a product is owned
+         * based solely on the verified receipt data.
+         *
+         * @param productId - The product identifier to check, or undefined to check any product
+         * @returns Object with ownership details including isOwned, expiryDate, and purchase info
+         */
+        checkVerifiedReceiptsOwnership(productId?: string): VerifiedReceiptOwnershipResult;
+        /**
          * Place an order for a given offer.
          */
         order(offer: Offer, additionalData?: AdditionalData): Promise<IError | undefined>;
@@ -1461,6 +1472,44 @@ declare namespace CdvPurchase {
     enum PriceConsentStatus {
         NOTIFIED = "Notified",
         AGREED = "Agreed"
+    }
+    /**
+     * Information about a verified purchase returned by checkVerifiedReceiptsOwnership
+     */
+    interface VerifiedPurchaseInfo {
+        /** Product identifier */
+        id: string;
+        /** Platform this purchase was made on */
+        platform: Platform;
+        /** Whether this purchase is currently active (not expired) */
+        isActive?: boolean;
+        /** Whether this purchase is expired */
+        isExpired: boolean;
+        /** Date of first purchase (timestamp) */
+        purchaseDate?: number;
+        /** Date of expiry for subscriptions (timestamp) */
+        expiryDate?: number;
+        /** True when subscription is in trial period */
+        isTrialPeriod?: boolean;
+        /** True when subscription is in introductory pricing period */
+        isIntroPeriod?: boolean;
+        /** True when subscription is in billing retry period */
+        isBillingRetryPeriod?: boolean;
+        /** Renewal intent */
+        renewalIntent?: string;
+    }
+    /**
+     * Result of checkVerifiedReceiptsOwnership
+     */
+    interface VerifiedReceiptOwnershipResult {
+        /** True if any of the checked products is owned (active subscription or valid purchase) */
+        isOwned: boolean;
+        /** Latest expiry date among all active subscriptions (timestamp) */
+        latestExpiryDate?: number;
+        /** Warning message if there was an issue checking ownership */
+        warning?: string;
+        /** List of all verified purchases found */
+        purchases: VerifiedPurchaseInfo[];
     }
     /** Reason why a subscription has been canceled */
     enum CancelationReason {

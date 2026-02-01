@@ -133,7 +133,7 @@ namespace CdvPurchase
     }
 
     function log(verbosity: boolean | LogLevel, level: LogLevel, prefix: string, o: any) {
-        var maxLevel = verbosity === true ? 1 : verbosity;
+        var maxLevel: number = verbosity === true ? 1 : (verbosity as number);
         if (level > maxLevel)
             return;
 
