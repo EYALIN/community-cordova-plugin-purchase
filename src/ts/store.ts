@@ -559,6 +559,84 @@ namespace CdvPurchase {
         }
 
         /**
+         * Check ownership status from verified receipts only.
+         *
+         * This is useful for iOS where StoreKit 1 doesn't automatically provide subscription
+         * transaction data on app restart. After calling restorePurchases() and waiting for
+         * receiptsVerified event, this method can be used to check if a product is owned
+         * based solely on the verified receipt data.
+         *
+         * @param productId - The product identifier to check, or undefined to check any product
+         * @returns Object with ownership details including isOwned, expiryDate, and purchase info
+         */
+        checkVerifiedReceiptsOwnership(productId?: string): VerifiedReceiptOwnershipResult {
+            const result: VerifiedReceiptOwnershipResult = {
+                isOwned: false,
+                purchases: []
+            };
+
+            if (!this.validator) {
+                result.warning = 'No validator configured';
+                return result;
+            }
+
+            const verifiedReceipts = this.verifiedReceipts || [];
+            if (verifiedReceipts.length === 0) {
+                result.warning = 'No verified receipts available';
+                return result;
+            }
+
+            for (const receipt of verifiedReceipts) {
+                const collection = receipt.collection || [];
+                for (const purchase of collection) {
+                    // If productId specified, only check that product
+                    if (productId && purchase.id !== productId) {
+                        continue;
+                    }
+
+                    const purchaseInfo: VerifiedPurchaseInfo = {
+                        id: purchase.id,
+                        platform: receipt.platform,
+                        isExpired: purchase.isExpired ?? false,
+                        purchaseDate: purchase.purchaseDate,
+                        expiryDate: purchase.expiryDate,
+                        isTrialPeriod: purchase.isTrialPeriod,
+                        isIntroPeriod: purchase.isIntroPeriod,
+                        isBillingRetryPeriod: purchase.isBillingRetryPeriod,
+                        renewalIntent: purchase.renewalIntent,
+                    };
+
+                    // Check if purchase is active
+                    let isActive = false;
+                    if (!purchase.isExpired) {
+                        if (purchase.expiryDate) {
+                            // Subscription - check expiry date
+                            isActive = purchase.expiryDate > Date.now();
+                        } else {
+                            // Non-subscription (lifetime, consumable that hasn't been consumed)
+                            isActive = true;
+                        }
+                    }
+
+                    purchaseInfo.isActive = isActive;
+                    result.purchases.push(purchaseInfo);
+
+                    if (isActive) {
+                        result.isOwned = true;
+                        // Keep the latest expiry date if checking all products
+                        if (purchase.expiryDate) {
+                            if (!result.latestExpiryDate || purchase.expiryDate > result.latestExpiryDate) {
+                                result.latestExpiryDate = purchase.expiryDate;
+                            }
+                        }
+                    }
+                }
+            }
+
+            return result;
+        }
+
+        /**
          * Place an order for a given offer.
          */
         async order(offer: Offer, additionalData?: AdditionalData): Promise<IError | undefined> {

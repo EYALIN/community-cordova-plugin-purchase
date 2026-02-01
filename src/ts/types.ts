@@ -362,6 +362,46 @@ namespace CdvPurchase {
         AGREED = 'Agreed',
     }
 
+    /**
+     * Information about a verified purchase returned by checkVerifiedReceiptsOwnership
+     */
+    export interface VerifiedPurchaseInfo {
+        /** Product identifier */
+        id: string;
+        /** Platform this purchase was made on */
+        platform: Platform;
+        /** Whether this purchase is currently active (not expired) */
+        isActive?: boolean;
+        /** Whether this purchase is expired */
+        isExpired: boolean;
+        /** Date of first purchase (timestamp) */
+        purchaseDate?: number;
+        /** Date of expiry for subscriptions (timestamp) */
+        expiryDate?: number;
+        /** True when subscription is in trial period */
+        isTrialPeriod?: boolean;
+        /** True when subscription is in introductory pricing period */
+        isIntroPeriod?: boolean;
+        /** True when subscription is in billing retry period */
+        isBillingRetryPeriod?: boolean;
+        /** Renewal intent */
+        renewalIntent?: string;
+    }
+
+    /**
+     * Result of checkVerifiedReceiptsOwnership
+     */
+    export interface VerifiedReceiptOwnershipResult {
+        /** True if any of the checked products is owned (active subscription or valid purchase) */
+        isOwned: boolean;
+        /** Latest expiry date among all active subscriptions (timestamp) */
+        latestExpiryDate?: number;
+        /** Warning message if there was an issue checking ownership */
+        warning?: string;
+        /** List of all verified purchases found */
+        purchases: VerifiedPurchaseInfo[];
+    }
+
     /** Reason why a subscription has been canceled */
     export enum CancelationReason {
         /** Not canceled */

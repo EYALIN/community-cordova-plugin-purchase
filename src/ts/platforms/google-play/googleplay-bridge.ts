@@ -355,7 +355,7 @@ namespace CdvPurchase {
             }
 
             function ensureObject<T extends Object>(obj: any): T {
-                return !!obj && obj.constructor === Object ? obj : {};
+                return (!!obj && obj.constructor === Object ? obj : {}) as T;
             }
 
             function extendAdditionalData(ad?: CdvPurchase.AdditionalData): AdditionalData {

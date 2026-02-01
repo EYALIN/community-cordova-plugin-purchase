@@ -17,67 +17,67 @@ var CdvPurchase;
     let ErrorCode;
     (function (ErrorCode) {
         /** Error: Failed to intialize the in-app purchase library */
-        ErrorCode[ErrorCode["SETUP"] = ERROR_CODES_BASE + 1] = "SETUP";
+        ErrorCode[ErrorCode["SETUP"] = 6777001] = "SETUP";
         /** Error: Failed to load in-app products metadata */
-        ErrorCode[ErrorCode["LOAD"] = ERROR_CODES_BASE + 2] = "LOAD";
+        ErrorCode[ErrorCode["LOAD"] = 6777002] = "LOAD";
         /** Error: Failed to make a purchase */
-        ErrorCode[ErrorCode["PURCHASE"] = ERROR_CODES_BASE + 3] = "PURCHASE";
+        ErrorCode[ErrorCode["PURCHASE"] = 6777003] = "PURCHASE";
         /** Error: Failed to load the purchase receipt */
-        ErrorCode[ErrorCode["LOAD_RECEIPTS"] = ERROR_CODES_BASE + 4] = "LOAD_RECEIPTS";
+        ErrorCode[ErrorCode["LOAD_RECEIPTS"] = 6777004] = "LOAD_RECEIPTS";
         /** Error: Client is not allowed to issue the request */
-        ErrorCode[ErrorCode["CLIENT_INVALID"] = ERROR_CODES_BASE + 5] = "CLIENT_INVALID";
+        ErrorCode[ErrorCode["CLIENT_INVALID"] = 6777005] = "CLIENT_INVALID";
         /** Error: Purchase flow has been cancelled by user */
-        ErrorCode[ErrorCode["PAYMENT_CANCELLED"] = ERROR_CODES_BASE + 6] = "PAYMENT_CANCELLED";
+        ErrorCode[ErrorCode["PAYMENT_CANCELLED"] = 6777006] = "PAYMENT_CANCELLED";
         /** Error: Something is suspicious about a purchase */
-        ErrorCode[ErrorCode["PAYMENT_INVALID"] = ERROR_CODES_BASE + 7] = "PAYMENT_INVALID";
+        ErrorCode[ErrorCode["PAYMENT_INVALID"] = 6777007] = "PAYMENT_INVALID";
         /** Error: The user is not allowed to make a payment */
-        ErrorCode[ErrorCode["PAYMENT_NOT_ALLOWED"] = ERROR_CODES_BASE + 8] = "PAYMENT_NOT_ALLOWED";
+        ErrorCode[ErrorCode["PAYMENT_NOT_ALLOWED"] = 6777008] = "PAYMENT_NOT_ALLOWED";
         /** Error: Unknown error */
-        ErrorCode[ErrorCode["UNKNOWN"] = ERROR_CODES_BASE + 10] = "UNKNOWN";
+        ErrorCode[ErrorCode["UNKNOWN"] = 6777010] = "UNKNOWN";
         /** Error: Failed to refresh the purchase receipt */
-        ErrorCode[ErrorCode["REFRESH_RECEIPTS"] = ERROR_CODES_BASE + 11] = "REFRESH_RECEIPTS";
+        ErrorCode[ErrorCode["REFRESH_RECEIPTS"] = 6777011] = "REFRESH_RECEIPTS";
         /** Error: The product identifier is invalid */
-        ErrorCode[ErrorCode["INVALID_PRODUCT_ID"] = ERROR_CODES_BASE + 12] = "INVALID_PRODUCT_ID";
+        ErrorCode[ErrorCode["INVALID_PRODUCT_ID"] = 6777012] = "INVALID_PRODUCT_ID";
         /** Error: Cannot finalize a transaction or acknowledge a purchase */
-        ErrorCode[ErrorCode["FINISH"] = ERROR_CODES_BASE + 13] = "FINISH";
+        ErrorCode[ErrorCode["FINISH"] = 6777013] = "FINISH";
         /** Error: Failed to communicate with the server */
-        ErrorCode[ErrorCode["COMMUNICATION"] = ERROR_CODES_BASE + 14] = "COMMUNICATION";
+        ErrorCode[ErrorCode["COMMUNICATION"] = 6777014] = "COMMUNICATION";
         /** Error: Subscriptions are not available */
-        ErrorCode[ErrorCode["SUBSCRIPTIONS_NOT_AVAILABLE"] = ERROR_CODES_BASE + 15] = "SUBSCRIPTIONS_NOT_AVAILABLE";
+        ErrorCode[ErrorCode["SUBSCRIPTIONS_NOT_AVAILABLE"] = 6777015] = "SUBSCRIPTIONS_NOT_AVAILABLE";
         /** Error: Purchase information is missing token */
-        ErrorCode[ErrorCode["MISSING_TOKEN"] = ERROR_CODES_BASE + 16] = "MISSING_TOKEN";
+        ErrorCode[ErrorCode["MISSING_TOKEN"] = 6777016] = "MISSING_TOKEN";
         /** Error: Verification of store data failed */
-        ErrorCode[ErrorCode["VERIFICATION_FAILED"] = ERROR_CODES_BASE + 17] = "VERIFICATION_FAILED";
+        ErrorCode[ErrorCode["VERIFICATION_FAILED"] = 6777017] = "VERIFICATION_FAILED";
         /** Error: Bad response from the server */
-        ErrorCode[ErrorCode["BAD_RESPONSE"] = ERROR_CODES_BASE + 18] = "BAD_RESPONSE";
+        ErrorCode[ErrorCode["BAD_RESPONSE"] = 6777018] = "BAD_RESPONSE";
         /** Error: Failed to refresh the store */
-        ErrorCode[ErrorCode["REFRESH"] = ERROR_CODES_BASE + 19] = "REFRESH";
+        ErrorCode[ErrorCode["REFRESH"] = 6777019] = "REFRESH";
         /** Error: Payment has expired */
-        ErrorCode[ErrorCode["PAYMENT_EXPIRED"] = ERROR_CODES_BASE + 20] = "PAYMENT_EXPIRED";
+        ErrorCode[ErrorCode["PAYMENT_EXPIRED"] = 6777020] = "PAYMENT_EXPIRED";
         /** Error: Failed to download the content */
-        ErrorCode[ErrorCode["DOWNLOAD"] = ERROR_CODES_BASE + 21] = "DOWNLOAD";
+        ErrorCode[ErrorCode["DOWNLOAD"] = 6777021] = "DOWNLOAD";
         /** Error: Failed to update a subscription */
-        ErrorCode[ErrorCode["SUBSCRIPTION_UPDATE_NOT_AVAILABLE"] = ERROR_CODES_BASE + 22] = "SUBSCRIPTION_UPDATE_NOT_AVAILABLE";
+        ErrorCode[ErrorCode["SUBSCRIPTION_UPDATE_NOT_AVAILABLE"] = 6777022] = "SUBSCRIPTION_UPDATE_NOT_AVAILABLE";
         /** Error: The requested product is not available in the store. */
-        ErrorCode[ErrorCode["PRODUCT_NOT_AVAILABLE"] = ERROR_CODES_BASE + 23] = "PRODUCT_NOT_AVAILABLE";
+        ErrorCode[ErrorCode["PRODUCT_NOT_AVAILABLE"] = 6777023] = "PRODUCT_NOT_AVAILABLE";
         /** Error: The user has not allowed access to Cloud service information */
-        ErrorCode[ErrorCode["CLOUD_SERVICE_PERMISSION_DENIED"] = ERROR_CODES_BASE + 24] = "CLOUD_SERVICE_PERMISSION_DENIED";
+        ErrorCode[ErrorCode["CLOUD_SERVICE_PERMISSION_DENIED"] = 6777024] = "CLOUD_SERVICE_PERMISSION_DENIED";
         /** Error: The device could not connect to the network. */
-        ErrorCode[ErrorCode["CLOUD_SERVICE_NETWORK_CONNECTION_FAILED"] = ERROR_CODES_BASE + 25] = "CLOUD_SERVICE_NETWORK_CONNECTION_FAILED";
+        ErrorCode[ErrorCode["CLOUD_SERVICE_NETWORK_CONNECTION_FAILED"] = 6777025] = "CLOUD_SERVICE_NETWORK_CONNECTION_FAILED";
         /** Error: The user has revoked permission to use this cloud service. */
-        ErrorCode[ErrorCode["CLOUD_SERVICE_REVOKED"] = ERROR_CODES_BASE + 26] = "CLOUD_SERVICE_REVOKED";
+        ErrorCode[ErrorCode["CLOUD_SERVICE_REVOKED"] = 6777026] = "CLOUD_SERVICE_REVOKED";
         /** Error: The user has not yet acknowledged Apple’s privacy policy */
-        ErrorCode[ErrorCode["PRIVACY_ACKNOWLEDGEMENT_REQUIRED"] = ERROR_CODES_BASE + 27] = "PRIVACY_ACKNOWLEDGEMENT_REQUIRED";
+        ErrorCode[ErrorCode["PRIVACY_ACKNOWLEDGEMENT_REQUIRED"] = 6777027] = "PRIVACY_ACKNOWLEDGEMENT_REQUIRED";
         /** Error: The app is attempting to use a property for which it does not have the required entitlement. */
-        ErrorCode[ErrorCode["UNAUTHORIZED_REQUEST_DATA"] = ERROR_CODES_BASE + 28] = "UNAUTHORIZED_REQUEST_DATA";
+        ErrorCode[ErrorCode["UNAUTHORIZED_REQUEST_DATA"] = 6777028] = "UNAUTHORIZED_REQUEST_DATA";
         /** Error: The offer identifier is invalid. */
-        ErrorCode[ErrorCode["INVALID_OFFER_IDENTIFIER"] = ERROR_CODES_BASE + 29] = "INVALID_OFFER_IDENTIFIER";
+        ErrorCode[ErrorCode["INVALID_OFFER_IDENTIFIER"] = 6777029] = "INVALID_OFFER_IDENTIFIER";
         /** Error: The price you specified in App Store Connect is no longer valid. */
-        ErrorCode[ErrorCode["INVALID_OFFER_PRICE"] = ERROR_CODES_BASE + 30] = "INVALID_OFFER_PRICE";
+        ErrorCode[ErrorCode["INVALID_OFFER_PRICE"] = 6777030] = "INVALID_OFFER_PRICE";
         /** Error: The signature in a payment discount is not valid. */
-        ErrorCode[ErrorCode["INVALID_SIGNATURE"] = ERROR_CODES_BASE + 31] = "INVALID_SIGNATURE";
+        ErrorCode[ErrorCode["INVALID_SIGNATURE"] = 6777031] = "INVALID_SIGNATURE";
         /** Error: Parameters are missing in a payment discount. */
-        ErrorCode[ErrorCode["MISSING_OFFER_PARAMS"] = ERROR_CODES_BASE + 32] = "MISSING_OFFER_PARAMS";
+        ErrorCode[ErrorCode["MISSING_OFFER_PARAMS"] = 6777032] = "MISSING_OFFER_PARAMS";
         /**
          * Server code used when a subscription expired.
          *
@@ -365,23 +365,6 @@ var CdvPurchase;
 (function (CdvPurchase) {
     /** Product definition from a store */
     class Product {
-        /** @internal */
-        constructor(p, decorator) {
-            /** @internal */
-            this.className = 'Product';
-            /** Product title from the store. */
-            this.title = '';
-            /** Product full description from the store. */
-            this.description = '';
-            this.platform = p.platform;
-            this.type = p.type;
-            this.id = p.id;
-            this.group = p.group;
-            this.offers = [];
-            Object.defineProperty(this, 'pricing', { enumerable: false, get: () => { var _a; return (_a = this.offers[0]) === null || _a === void 0 ? void 0 : _a.pricingPhases[0]; } });
-            Object.defineProperty(this, 'canPurchase', { enumerable: false, get: () => decorator.canPurchase(this) });
-            Object.defineProperty(this, 'owned', { enumerable: false, get: () => decorator.owned(this) });
-        }
         /**
          * Shortcut to offers[0].pricingPhases[0]
          *
@@ -412,6 +395,23 @@ var CdvPurchase;
             // Pseudo implementation to make typescript happy.
             // see Object.defineProperty in the constructor for the actual implementation.
             return false;
+        }
+        /** @internal */
+        constructor(p, decorator) {
+            /** @internal */
+            this.className = 'Product';
+            /** Product title from the store. */
+            this.title = '';
+            /** Product full description from the store. */
+            this.description = '';
+            this.platform = p.platform;
+            this.type = p.type;
+            this.id = p.id;
+            this.group = p.group;
+            this.offers = [];
+            Object.defineProperty(this, 'pricing', { enumerable: false, get: () => { var _a; return (_a = this.offers[0]) === null || _a === void 0 ? void 0 : _a.pricingPhases[0]; } });
+            Object.defineProperty(this, 'canPurchase', { enumerable: false, get: () => decorator.canPurchase(this) });
+            Object.defineProperty(this, 'owned', { enumerable: false, get: () => decorator.owned(this) });
         }
         /**
          * Find and return an offer for this product from its id
@@ -612,8 +612,8 @@ var CdvPurchase;
                 receipts.forEach(receipt => this.runOnReceipt(receipt, onResponse));
             }
             runOnReceipt(receipt, callback) {
-                var _a, _b;
                 return __awaiter(this, void 0, void 0, function* () {
+                    var _a, _b;
                     if (receipt.platform === CdvPurchase.Platform.TEST) {
                         this.log.debug('Using Test Adapter mock verify function.');
                         return CdvPurchase.Test.Adapter.verify(receipt, callback);
@@ -659,8 +659,8 @@ var CdvPurchase;
                 }
             }
             buildRequestBody(receipt) {
-                var _a, _b, _c;
                 return __awaiter(this, void 0, void 0, function* () {
+                    var _a, _b, _c;
                     // Let the adapter generate the initial content
                     const adapter = this.controller.adapters.find(receipt.platform);
                     const body = yield (adapter === null || adapter === void 0 ? void 0 : adapter.receiptValidationBody(receipt));
@@ -1183,14 +1183,14 @@ var CdvPurchase;
          * monitor.stop();
          */
         class TransactionStateMonitors {
+            findMonitors(transaction) {
+                return this.monitors.filter(monitor => monitor.transaction.platform === transaction.platform
+                    && monitor.transaction.transactionId === transaction.transactionId);
+            }
             constructor(when) {
                 this.monitors = [];
                 this.isListening = false;
                 this.when = when;
-            }
-            findMonitors(transaction) {
-                return this.monitors.filter(monitor => monitor.transaction.platform === transaction.platform
-                    && monitor.transaction.transactionId === transaction.transactionId);
             }
             startListening() {
                 if (this.isListening) {
@@ -1381,7 +1381,7 @@ var CdvPurchase;
          */
         ExpiryMonitor.GRACE_PERIOD_MS = {
             DEFAULT: 60000,
-            "ios-appstore": 60000,
+            "ios-appstore": 60000, // Apple takes longer to propagate renewals
             "android-playstore": 30000,
         };
         Internal.ExpiryMonitor = ExpiryMonitor;
@@ -1438,6 +1438,24 @@ var CdvPurchase;
      * Entry class of the plugin.
      */
     class Store {
+        /**
+         * Retrieve a platform adapter.
+         *
+         * The platform adapter has to have been initialized before.
+         *
+         * @see {@link initialize}
+         */
+        getAdapter(platform) {
+            return this.adapters.find(platform);
+        }
+        /**
+         * Get the application username as a string by either calling or returning {@link Store.applicationUsername}
+        */
+        getApplicationUsername() {
+            if (this.applicationUsername instanceof Function)
+                return this.applicationUsername();
+            return this.applicationUsername;
+        }
         constructor() {
             /**
              * Payment platform adapters.
@@ -1556,24 +1574,6 @@ var CdvPurchase;
             this.expiryMonitor.launch();
         }
         /**
-         * Retrieve a platform adapter.
-         *
-         * The platform adapter has to have been initialized before.
-         *
-         * @see {@link initialize}
-         */
-        getAdapter(platform) {
-            return this.adapters.find(platform);
-        }
-        /**
-         * Get the application username as a string by either calling or returning {@link Store.applicationUsername}
-        */
-        getApplicationUsername() {
-            if (this.applicationUsername instanceof Function)
-                return this.applicationUsername();
-            return this.applicationUsername;
-        }
-        /**
          * Register a product.
          *
          * @example
@@ -1617,8 +1617,8 @@ var CdvPurchase;
          *
          * @param platforms - List of payment platforms to initialize, default to Store.defaultPlatform().
          */
-        initialize(platforms = [this.defaultPlatform()]) {
-            return __awaiter(this, void 0, void 0, function* () {
+        initialize() {
+            return __awaiter(this, arguments, void 0, function* (platforms = [this.defaultPlatform()]) {
                 if (this.initializedHasBeenCalled) {
                     this.log.warn('store.initialized() has been called already.');
                     return [];
@@ -1659,8 +1659,8 @@ var CdvPurchase;
          * Call to refresh the price of products and status of purchases.
          */
         update() {
-            var _a;
             return __awaiter(this, void 0, void 0, function* () {
+                var _a;
                 this.log.info('update()');
                 if (!this._readyCallbacks.isReady) {
                     this.log.warn('Do not call store.update() at startup! It is meant to reload the price of products (if needed) long after initialization.');
@@ -1850,6 +1850,77 @@ var CdvPurchase;
                 verifiedReceipts: this.validator ? this.verifiedReceipts : undefined,
                 localReceipts: this.localReceipts,
             });
+        }
+        /**
+         * Check ownership status from verified receipts only.
+         *
+         * This is useful for iOS where StoreKit 1 doesn't automatically provide subscription
+         * transaction data on app restart. After calling restorePurchases() and waiting for
+         * receiptsVerified event, this method can be used to check if a product is owned
+         * based solely on the verified receipt data.
+         *
+         * @param productId - The product identifier to check, or undefined to check any product
+         * @returns Object with ownership details including isOwned, expiryDate, and purchase info
+         */
+        checkVerifiedReceiptsOwnership(productId) {
+            var _a;
+            const result = {
+                isOwned: false,
+                purchases: []
+            };
+            if (!this.validator) {
+                result.warning = 'No validator configured';
+                return result;
+            }
+            const verifiedReceipts = this.verifiedReceipts || [];
+            if (verifiedReceipts.length === 0) {
+                result.warning = 'No verified receipts available';
+                return result;
+            }
+            for (const receipt of verifiedReceipts) {
+                const collection = receipt.collection || [];
+                for (const purchase of collection) {
+                    // If productId specified, only check that product
+                    if (productId && purchase.id !== productId) {
+                        continue;
+                    }
+                    const purchaseInfo = {
+                        id: purchase.id,
+                        platform: receipt.platform,
+                        isExpired: (_a = purchase.isExpired) !== null && _a !== void 0 ? _a : false,
+                        purchaseDate: purchase.purchaseDate,
+                        expiryDate: purchase.expiryDate,
+                        isTrialPeriod: purchase.isTrialPeriod,
+                        isIntroPeriod: purchase.isIntroPeriod,
+                        isBillingRetryPeriod: purchase.isBillingRetryPeriod,
+                        renewalIntent: purchase.renewalIntent,
+                    };
+                    // Check if purchase is active
+                    let isActive = false;
+                    if (!purchase.isExpired) {
+                        if (purchase.expiryDate) {
+                            // Subscription - check expiry date
+                            isActive = purchase.expiryDate > Date.now();
+                        }
+                        else {
+                            // Non-subscription (lifetime, consumable that hasn't been consumed)
+                            isActive = true;
+                        }
+                    }
+                    purchaseInfo.isActive = isActive;
+                    result.purchases.push(purchaseInfo);
+                    if (isActive) {
+                        result.isOwned = true;
+                        // Keep the latest expiry date if checking all products
+                        if (purchase.expiryDate) {
+                            if (!result.latestExpiryDate || purchase.expiryDate > result.latestExpiryDate) {
+                                result.latestExpiryDate = purchase.expiryDate;
+                            }
+                        }
+                    }
+                }
+            }
+            return result;
         }
         /**
          * Place an order for a given offer.
@@ -2262,20 +2333,6 @@ var CdvPurchase;
      * One of the available offers to purchase a given product
      */
     class Offer {
-        /** @internal */
-        constructor(options, decorator) {
-            /** className, used to make sure we're passing an actual instance of the "Offer" class. */
-            this.className = 'Offer';
-            this.id = options.id;
-            this.pricingPhases = options.pricingPhases;
-            // Object.defineProperty(this, 'product', { enumerable: false, get: () => options.product });
-            Object.defineProperty(this, 'productId', { enumerable: true, get: () => options.product.id });
-            Object.defineProperty(this, 'productType', { enumerable: true, get: () => options.product.type });
-            Object.defineProperty(this, 'productGroup', { enumerable: true, get: () => options.product.group });
-            Object.defineProperty(this, 'platform', { enumerable: true, get: () => options.product.platform });
-            Object.defineProperty(this, 'order', { enumerable: false, get: () => (additionalData) => decorator.order(this, additionalData) });
-            Object.defineProperty(this, 'canPurchase', { enumerable: false, get: () => decorator.canPurchase(this) });
-        }
         /** Identifier of the product related to this offer */
         get productId() { return ''; }
         /** Type of the product related to this offer */
@@ -2304,6 +2361,20 @@ var CdvPurchase;
             // Pseudo implementation to make typescript happy.
             // see Object.defineProperty in the constructor for the actual implementation.
             return false;
+        }
+        /** @internal */
+        constructor(options, decorator) {
+            /** className, used to make sure we're passing an actual instance of the "Offer" class. */
+            this.className = 'Offer';
+            this.id = options.id;
+            this.pricingPhases = options.pricingPhases;
+            // Object.defineProperty(this, 'product', { enumerable: false, get: () => options.product });
+            Object.defineProperty(this, 'productId', { enumerable: true, get: () => options.product.id });
+            Object.defineProperty(this, 'productType', { enumerable: true, get: () => options.product.type });
+            Object.defineProperty(this, 'productGroup', { enumerable: true, get: () => options.product.group });
+            Object.defineProperty(this, 'platform', { enumerable: true, get: () => options.product.platform });
+            Object.defineProperty(this, 'order', { enumerable: false, get: () => (additionalData) => decorator.order(this, additionalData) });
+            Object.defineProperty(this, 'canPurchase', { enumerable: false, get: () => decorator.canPurchase(this) });
         }
     }
     CdvPurchase.Offer = Offer;
@@ -2391,6 +2462,14 @@ var CdvPurchase;
 var CdvPurchase;
 (function (CdvPurchase) {
     class Receipt {
+        /** Verify a receipt */
+        verify() {
+            return __awaiter(this, void 0, void 0, function* () { });
+        }
+        /** Finish all transactions in a receipt */
+        finish() {
+            return __awaiter(this, void 0, void 0, function* () { });
+        }
         /** @internal */
         constructor(platform, decorator) {
             /** @internal */
@@ -2400,14 +2479,6 @@ var CdvPurchase;
             this.platform = platform;
             Object.defineProperty(this, 'verify', { 'enumerable': false, get() { return () => decorator.verify(this); } });
             Object.defineProperty(this, 'finish', { 'enumerable': false, get() { return () => decorator.finish(this); } });
-        }
-        /** Verify a receipt */
-        verify() {
-            return __awaiter(this, void 0, void 0, function* () { });
-        }
-        /** Finish all transactions in a receipt */
-        finish() {
-            return __awaiter(this, void 0, void 0, function* () { });
         }
         /** Return true if the receipt contains the given transaction */
         hasTransaction(value) {
@@ -2429,21 +2500,6 @@ var CdvPurchase;
      * @see {@link store.localTransactions}
      */
     class Transaction {
-        /** @internal */
-        constructor(platform, parentReceipt, decorator) {
-            /** @internal */
-            this.className = 'Transaction';
-            /** Transaction identifier. */
-            this.transactionId = '';
-            /** State this transaction is in */
-            this.state = CdvPurchase.TransactionState.UNKNOWN_STATE;
-            /** Purchased products */
-            this.products = [];
-            this.platform = platform;
-            Object.defineProperty(this, 'finish', { 'enumerable': false, get() { return () => decorator.finish(this); } });
-            Object.defineProperty(this, 'verify', { 'enumerable': false, get() { return () => decorator.verify(this); } });
-            Object.defineProperty(this, 'parentReceipt', { 'enumerable': false, get() { return parentReceipt; } });
-        }
         /**
          * Finish a transaction.
          *
@@ -2477,6 +2533,21 @@ var CdvPurchase;
          * Return the receipt this transaction is part of.
          */
         get parentReceipt() { return {}; } // actual implementation in the constructor
+        /** @internal */
+        constructor(platform, parentReceipt, decorator) {
+            /** @internal */
+            this.className = 'Transaction';
+            /** Transaction identifier. */
+            this.transactionId = '';
+            /** State this transaction is in */
+            this.state = CdvPurchase.TransactionState.UNKNOWN_STATE;
+            /** Purchased products */
+            this.products = [];
+            this.platform = platform;
+            Object.defineProperty(this, 'finish', { 'enumerable': false, get() { return () => decorator.finish(this); } });
+            Object.defineProperty(this, 'verify', { 'enumerable': false, get() { return () => decorator.verify(this); } });
+            Object.defineProperty(this, 'parentReceipt', { 'enumerable': false, get() { return parentReceipt; } });
+        }
     }
     CdvPurchase.Transaction = Transaction;
 })(CdvPurchase || (CdvPurchase = {}));
@@ -2813,6 +2884,23 @@ var CdvPurchase;
          * Adapter for Apple AppStore using StoreKit version 1
          */
         class Adapter {
+            get products() { return this._products; }
+            /** Find a given product from ID */
+            getProduct(id) { return this._products.find(p => p.id === id); }
+            get receipts() {
+                if (!this.isSupported)
+                    return [];
+                return (this._receipt ? [this._receipt] : [])
+                    .concat(this.pseudoReceipt ? this.pseudoReceipt : []);
+            }
+            addValidProducts(registerProducts, validProducts) {
+                validProducts.forEach(vp => {
+                    const rp = registerProducts.find(p => p.id === vp.id);
+                    if (!rp)
+                        return;
+                    this.validProducts[vp.id] = Object.assign(Object.assign({}, vp), rp);
+                });
+            }
             constructor(context, options) {
                 var _a, _b;
                 this.id = CdvPurchase.Platform.APPLE_APPSTORE;
@@ -2844,23 +2932,6 @@ var CdvPurchase;
                 this.receiptsUpdated = CdvPurchase.Utils.createDebouncer(() => {
                     this._receiptsUpdated();
                 }, 300);
-            }
-            get products() { return this._products; }
-            /** Find a given product from ID */
-            getProduct(id) { return this._products.find(p => p.id === id); }
-            get receipts() {
-                if (!this.isSupported)
-                    return [];
-                return (this._receipt ? [this._receipt] : [])
-                    .concat(this.pseudoReceipt ? this.pseudoReceipt : []);
-            }
-            addValidProducts(registerProducts, validProducts) {
-                validProducts.forEach(vp => {
-                    const rp = registerProducts.find(p => p.id === vp.id);
-                    if (!rp)
-                        return;
-                    this.validProducts[vp.id] = Object.assign(Object.assign({}, vp), rp);
-                });
             }
             /** Returns true on iOS, the only platform supported by this adapter */
             get isSupported() {
@@ -3396,8 +3467,8 @@ var CdvPurchase;
                 });
             }
             handleReceiptValidationResponse(_receipt, response) {
-                var _a, _b;
                 return __awaiter(this, void 0, void 0, function* () {
+                    var _a, _b;
                     // we can add the purchaseDate to the application transaction
                     let localReceiptUpdated = false;
                     if (response.ok) {
@@ -4120,6 +4191,7 @@ var CdvPurchase;
         }
         Braintree.BraintreeReceipt = BraintreeReceipt;
         class Adapter {
+            get receipts() { return this._receipts; }
             constructor(context, options) {
                 this.id = CdvPurchase.Platform.BRAINTREE;
                 this.name = 'BrainTree';
@@ -4131,7 +4203,6 @@ var CdvPurchase;
                 this.log = context.log.child("Braintree");
                 this.options = options;
             }
-            get receipts() { return this._receipts; }
             get isSupported() {
                 return Braintree.IosBridge.Bridge.isSupported() || Braintree.AndroidBridge.Bridge.isSupported();
             }
@@ -4229,8 +4300,8 @@ var CdvPurchase;
                 });
             }
             requestPayment(paymentRequest, additionalData) {
-                var _a, _b, _c, _d, _e, _f, _g, _h, _j;
                 return __awaiter(this, void 0, void 0, function* () {
+                    var _a, _b, _c, _d, _e, _f, _g, _h, _j;
                     this.log.info("requestPayment()" + JSON.stringify(paymentRequest));
                     const dropInRequest = ((_a = additionalData === null || additionalData === void 0 ? void 0 : additionalData.braintree) === null || _a === void 0 ? void 0 : _a.dropInRequest) || {};
                     // Apple Pay
@@ -4296,8 +4367,8 @@ var CdvPurchase;
                 });
             }
             receiptValidationBody(receipt) {
-                var _a, _b, _c, _d, _e;
                 return __awaiter(this, void 0, void 0, function* () {
+                    var _a, _b, _c, _d, _e;
                     if (!isBraintreeReceipt(receipt)) {
                         this.log.error("Unexpected error, expecting a BraintreeReceipt: " + JSON.stringify(receipt));
                         return;
@@ -4328,8 +4399,8 @@ var CdvPurchase;
              * @returns A promise that resolves when the response has been handled.
              */
             handleReceiptValidationResponse(receipt, response) {
-                var _a;
                 return __awaiter(this, void 0, void 0, function* () {
+                    var _a;
                     this.log.info("receipt validation response: " + JSON.stringify(response));
                     if ((response === null || response === void 0 ? void 0 : response.data) && ('transaction' in response.data)) {
                         if (response.data.transaction.type === 'braintree') {
@@ -4692,8 +4763,8 @@ var CdvPurchase;
                     setTimeout(() => callback(undefined), 0);
                 }
                 continueDropInForApplePay(paymentRequest, DropInRequest, dropInResult) {
-                    var _a, _b, _c, _d, _e, _f, _g, _h, _j;
                     return __awaiter(this, void 0, void 0, function* () {
+                        var _a, _b, _c, _d, _e, _f, _g, _h, _j;
                         const request = ((_b = (_a = this.applePayOptions) === null || _a === void 0 ? void 0 : _a.preparePaymentRequest) === null || _b === void 0 ? void 0 : _b.call(_a, paymentRequest)) || {
                             merchantCapabilities: [CdvPurchase.ApplePay.MerchantCapability.ThreeDS],
                         };
@@ -5003,6 +5074,9 @@ var CdvPurchase;
         }
         GooglePlay.Receipt = Receipt;
         class Adapter {
+            /** List of products managed by the GooglePlay adapter */
+            get products() { return this._products.products; }
+            get receipts() { return this._receipts; }
             constructor(context, autoRefreshIntervalMillis = 1000 * 3600 * 24) {
                 /** Adapter identifier */
                 this.id = CdvPurchase.Platform.GOOGLE_PLAY;
@@ -5030,9 +5104,6 @@ var CdvPurchase;
                 this.log = context.log.child('GooglePlay');
                 Adapter._instance = this;
             }
-            /** List of products managed by the GooglePlay adapter */
-            get products() { return this._products.products; }
-            get receipts() { return this._receipts; }
             /** Returns true on Android, the only platform supported by this adapter */
             get isSupported() {
                 return CdvPurchase.Utils.platformId() === 'android';
@@ -5363,8 +5434,8 @@ var CdvPurchase;
              * Prepare for receipt validation
              */
             receiptValidationBody(receipt) {
-                var _a;
                 return __awaiter(this, void 0, void 0, function* () {
+                    var _a;
                     const transaction = receipt.transactions[0];
                     if (!transaction)
                         return;
@@ -5391,8 +5462,8 @@ var CdvPurchase;
                 });
             }
             handleReceiptValidationResponse(receipt, response) {
-                var _a;
                 return __awaiter(this, void 0, void 0, function* () {
+                    var _a;
                     if (response === null || response === void 0 ? void 0 : response.ok) {
                         const transaction = (_a = response === null || response === void 0 ? void 0 : response.data) === null || _a === void 0 ? void 0 : _a.transaction;
                         if ((transaction === null || transaction === void 0 ? void 0 : transaction.type) !== CdvPurchase.Platform.GOOGLE_PLAY)
@@ -5448,7 +5519,7 @@ var CdvPurchase;
         Adapter.trimProductTitles = true;
         /** Refresh intervals (in milliseconds) */
         Adapter.REFRESH_INTERVALS = {
-            SANDBOX: 6 * 60 * 1000,
+            SANDBOX: 6 * 60 * 1000, // 6 minutes for sandbox
             PRODUCTION: 7 * 24 * 60 * 60 * 1000 + 10 * 60 * 1000, // 7 days + 10 minutes for production
         };
         GooglePlay.Adapter = Adapter;
@@ -5707,7 +5778,7 @@ var CdvPurchase;
                 };
             }
             function ensureObject(obj) {
-                return !!obj && obj.constructor === Object ? obj : {};
+                return (!!obj && obj.constructor === Object ? obj : {});
             }
             function extendAdditionalData(ad) {
                 const additionalData = ensureObject(ad === null || ad === void 0 ? void 0 : ad.googlePlay);
@@ -6305,6 +6376,17 @@ var CdvPurchase;
         }
         IapticJS.Transaction = Transaction;
         class Adapter {
+            get receipts() { return this._receipts; }
+            upsertProduct(product) {
+                this.log.debug(`upsertProduct(${product.id})`);
+                const existingIndex = this.products.findIndex(p => p.id === product.id);
+                if (existingIndex >= 0) {
+                    this.products[existingIndex] = product;
+                }
+                else {
+                    this.products.push(product);
+                }
+            }
             constructor(context, options) {
                 this.id = CdvPurchase.Platform.IAPTIC_JS;
                 this.name = 'IapticJS';
@@ -6318,17 +6400,6 @@ var CdvPurchase;
                 this.log = context.log.child("IapticJS");
                 this.options = options;
                 this.backendAdapterType = options.type;
-            }
-            get receipts() { return this._receipts; }
-            upsertProduct(product) {
-                this.log.debug(`upsertProduct(${product.id})`);
-                const existingIndex = this.products.findIndex(p => p.id === product.id);
-                if (existingIndex >= 0) {
-                    this.products[existingIndex] = product;
-                }
-                else {
-                    this.products.push(product);
-                }
             }
             get isSupported() {
                 // Check for the global IapticJS object
@@ -6409,7 +6480,7 @@ var CdvPurchase;
                                         priceMicros: pp.priceMicros,
                                         currency: pp.currency,
                                         billingPeriod: pp.billingPeriod,
-                                        paymentMode: pp.paymentMode,
+                                        paymentMode: pp.paymentMode, // Cast might be needed if types differ slightly
                                         recurrenceMode: pp.recurrenceMode,
                                         price: window.IapticJS.Utils.formatCurrency(pp.priceMicros, pp.currency) // Use Utils for formatting
                                     })),
@@ -6430,8 +6501,8 @@ var CdvPurchase;
                 });
             }
             loadReceipts() {
-                var _a, _b;
                 return __awaiter(this, void 0, void 0, function* () {
+                    var _a, _b;
                     this.log.info('loadReceipts()');
                     if (!this.ready || !this.iapticAdapterInstance) {
                         this.log.warn('Adapter not ready, skipping loadReceipts.');
@@ -6500,8 +6571,8 @@ var CdvPurchase;
                     try {
                         yield this.iapticAdapterInstance.order({
                             offerId: offer.id,
-                            applicationUsername: (additionalData === null || additionalData === void 0 ? void 0 : additionalData.applicationUsername) || this.context.getApplicationUsername() || '',
-                            successUrl: window.location.href,
+                            applicationUsername: (additionalData === null || additionalData === void 0 ? void 0 : additionalData.applicationUsername) || this.context.getApplicationUsername() || '', // Pass username
+                            successUrl: window.location.href, // Use current URL as default
                             cancelUrl: window.location.href,
                             accessToken: this.iapticAdapterInstance.getAccessToken(), // Pass existing token
                         });
@@ -6532,8 +6603,8 @@ var CdvPurchase;
                 });
             }
             receiptValidationBody(receipt) {
-                var _a, _b, _c;
                 return __awaiter(this, void 0, void 0, function* () {
+                    var _a, _b, _c;
                     if (receipt.platform !== CdvPurchase.Platform.IAPTIC_JS)
                         return undefined;
                     this.log.info(`receiptValidationBody for IapticJS - AccessToken: ${receipt.accessToken ? 'present' : 'missing'}`);
@@ -6555,8 +6626,8 @@ var CdvPurchase;
                             offers: p.offers.map(o => ({ id: o.id, pricingPhases: o.pricingPhases }))
                         })),
                         transaction: {
-                            type: 'iaptic',
-                            adapter: this.backendAdapterType,
+                            type: 'iaptic', // Use 'iaptic' as the generic type
+                            adapter: this.backendAdapterType, // Specify the backend ('stripe')
                             accessToken: receipt.accessToken,
                         }
                     };
@@ -6576,13 +6647,13 @@ var CdvPurchase;
                                     purchaseId: vp.purchaseId,
                                     transactionId: vp.transactionId,
                                     productId: vp.id,
-                                    platform: 'stripe',
+                                    platform: 'stripe', // Assuming Stripe for now
                                     purchaseDate: vp.purchaseDate ? new Date(vp.purchaseDate).toISOString() : '',
                                     lastRenewalDate: vp.lastRenewalDate ? new Date(vp.lastRenewalDate).toISOString() : '',
                                     expirationDate: vp.expiryDate ? new Date(vp.expiryDate).toISOString() : '',
                                     renewalIntent: vp.renewalIntent === CdvPurchase.RenewalIntent.RENEW ? 'Renew' : 'Cancel',
                                     isTrialPeriod: (_a = vp.isTrialPeriod) !== null && _a !== void 0 ? _a : false,
-                                    amountMicros: 0,
+                                    amountMicros: 0, // Not typically in VerifiedPurchase, focus is entitlement
                                     currency: '', // Not typically in VerifiedPurchase
                                 });
                             });
@@ -6847,8 +6918,8 @@ var CdvPurchase;
              * }
              */
             requestPayment(paymentRequest, additionalData) {
-                var _a;
                 return __awaiter(this, void 0, void 0, function* () {
+                    var _a;
                     yield CdvPurchase.Utils.asyncDelay(100); // maybe app has some UI to update... and "prompt" prevents that
                     const response = prompt(`Mock payment of ${((_a = paymentRequest.amountMicros) !== null && _a !== void 0 ? _a : 0) / 1000000} ${paymentRequest.currency}. Enter "Y" to confirm. Enter "E" to trigger an error.`);
                     if ((response === null || response === void 0 ? void 0 : response.toUpperCase()) === 'E')
@@ -7841,6 +7912,10 @@ var CdvPurchase;
 (function (CdvPurchase) {
     /** Receipt data as validated by the receipt validation server */
     class VerifiedReceipt {
+        /** Platform this receipt originated from */
+        get platform() { return this.sourceReceipt.platform; }
+        /** Get raw response data from the receipt validation request */
+        get raw() { return {}; } // actual implementation as "defineProperty" in constructor.
         /**
          * @internal
          */
@@ -7858,10 +7933,6 @@ var CdvPurchase;
             Object.defineProperty(this, 'raw', { 'enumerable': false, get() { return response; } });
             Object.defineProperty(this, 'finish', { 'enumerable': false, get() { return () => decorator.finish(this); } });
         }
-        /** Platform this receipt originated from */
-        get platform() { return this.sourceReceipt.platform; }
-        /** Get raw response data from the receipt validation request */
-        get raw() { return {}; } // actual implementation as "defineProperty" in constructor.
         /**
          * Update the receipt content
          *
