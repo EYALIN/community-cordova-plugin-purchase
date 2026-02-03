@@ -1,3 +1,98 @@
+declare namespace ModuleIapticJS {
+    type ProductType = 'subscription' | 'consumable' | 'non_consumable' | 'paid subscription';
+    interface PricingPhase {
+        priceMicros: number;
+        currency: string;
+        billingPeriod: string;
+        recurrenceMode: 'INFINITE_RECURRING' | 'NON_RECURRING' | 'FINITE_RECURRING';
+        paymentMode: 'PayAsYouGo' | 'PayUpFront';
+    }
+    interface Offer {
+        id: string;
+        platform: string;
+        offerType: 'Subscription' | 'Default';
+        pricingPhases: PricingPhase[];
+    }
+    interface Product {
+        type: ProductType;
+        id: string;
+        title: string;
+        description?: string;
+        offers: Offer[];
+        metadata?: Record<string, any>;
+        platform?: string;
+    }
+    interface Purchase {
+        purchaseId: string;
+        transactionId: string;
+        productId: string;
+        platform: 'stripe';
+        purchaseDate: string;
+        lastRenewalDate: string;
+        expirationDate: string;
+        renewalIntent: 'Renew' | 'Cancel';
+        isTrialPeriod: boolean;
+        amountMicros: number;
+        currency: string;
+    }
+    interface Order {
+        offerId: string;
+        applicationUsername: string;
+        successUrl: string;
+        cancelUrl: string;
+        accessToken?: string;
+    }
+    interface PlanChange {
+        purchaseId: string;
+        offerId: string;
+        accessToken?: string;
+    }
+    interface Config {
+        type: 'stripe';
+        stripePublicKey: string;
+        appName: string;
+        apiKey: string;
+        customIapticUrl?: string;
+    }
+    interface GetProductsResponse {
+        ok: boolean;
+        products: Product[];
+    }
+    interface PostCheckoutSessionResponse {
+        ok: boolean;
+        url: string;
+        accessToken: string;
+    }
+    interface GetPurchasesResponse {
+        ok: boolean;
+        purchases: Purchase[];
+        newAccessToken?: string;
+    }
+    interface ChangePlanResponse {
+        ok: boolean;
+        purchase: Purchase;
+        newAccessToken?: string;
+    }
+    class IapticStripe {
+        constructor(config: Config);
+        getProducts(): Promise<Product[]>;
+        refreshProducts(): Promise<Product[]>;
+        getAccessToken(): string | undefined;
+        order(params: Order): Promise<void>;
+        getPurchases(accessToken?: string): Promise<Purchase[]>;
+        redirectToCustomerPortal(params: { returnUrl?: string; accessToken?: string }): Promise<void>;
+        changePlan(planChange: PlanChange): Promise<Purchase>;
+        clearStoredData(): void;
+    }
+    class Utils {
+        static formatCurrency(amountMicros: number, currency: string): string;
+        static formatBillingPeriodEN(period: string): string;
+        static base64Encode(str: string): string;
+        static buildUrl(baseUrl: string, params: Record<string, string>): string;
+    }
+    function createAdapter(config: Config): IapticStripe;
+}
+
 declare namespace CdvPurchase {
     /**
      * Error codes

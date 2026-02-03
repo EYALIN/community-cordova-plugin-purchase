@@ -1,6 +1,6 @@
 {
   "name": "community-cordova-plugin-purchase",
-  "version": "1.0.1",
+  "version": "1.0.3",
   "description": "Community Cordova In-App Purchase Plugin for iOS (AppStore), Android (PlayStore) and Windows",
   "main": "./www/store.js",
   "types": "./www/store.d.ts",
