@@ -33,6 +33,7 @@ import com.android.billingclient.api.BillingClientStateListener;
 import com.android.billingclient.api.BillingFlowParams;
 import com.android.billingclient.api.BillingFlowParams.ProductDetailsParams;
 import com.android.billingclient.api.BillingResult;
+import com.android.billingclient.api.PendingPurchasesParams;
 import com.android.billingclient.api.ConsumeParams;
 import com.android.billingclient.api.ConsumeResponseListener;
 import com.android.billingclient.api.ProductDetails;
@@ -40,6 +41,7 @@ import com.android.billingclient.api.ProductDetails.OneTimePurchaseOfferDetails;
 import com.android.billingclient.api.ProductDetails.PricingPhase;
 import com.android.billingclient.api.ProductDetails.SubscriptionOfferDetails;
 import com.android.billingclient.api.ProductDetailsResponseListener;
+import com.android.billingclient.api.QueryProductDetailsResult;
 import com.android.billingclient.api.Purchase;
 import com.android.billingclient.api.PurchasesResponseListener;
 import com.android.billingclient.api.PurchasesUpdatedListener;
@@ -300,7 +302,7 @@ public final class PurchasePlugin
 
     mBillingClient = BillingClient
       .newBuilder(cordova.getActivity())
-      .enablePendingPurchases()
+      .enablePendingPurchases(PendingPurchasesParams.newBuilder().enableOneTimeProducts().build())
       .setListener(this)
       .build();
 
@@ -560,7 +562,7 @@ public final class PurchasePlugin
   private void getAvailableProducts(List<String> inAppProductIds, List<String> subsProductIds) {
     Log.d(mTag, "getAvailableProducts()");
     final CallbackContext callbackContext = this.mCallbackContext; // Store current context
-    queryAllProductDetails(inAppProductIds, subsProductIds, new ProductDetailsResponseListener() {
+    queryAllProductDetails(inAppProductIds, subsProductIds, new AggregatedProductDetailsListener() {
         @Override
         public void onProductDetailsResponse(
             final BillingResult result,
@@ -1110,7 +1112,17 @@ public final class PurchasePlugin
    *
    * @param listener Code to run once data has been loaded
    */
-  private void queryAllProductDetails(List<String> inAppProductIds, List<String> subsProductIds, final ProductDetailsResponseListener listener) {
+  /**
+   * Internal aggregation callback. Google Play Billing 8+ changed the SDK's
+   * {@link ProductDetailsResponseListener} to deliver a {@link QueryProductDetailsResult}
+   * instead of a {@code List<ProductDetails>}, so the plugin uses its own interface
+   * for the aggregated result it hands back to callers.
+   */
+  private interface AggregatedProductDetailsListener {
+    void onProductDetailsResponse(BillingResult result, List<ProductDetails> productDetailsList);
+  }
+
+  private void queryAllProductDetails(List<String> inAppProductIds, List<String> subsProductIds, final AggregatedProductDetailsListener listener) {
     Log.d(mTag, "queryAllProductDetails()");
     ArrayList<ProductDetails> allProducts = new ArrayList<ProductDetails>();
 
@@ -1124,7 +1136,11 @@ public final class PurchasePlugin
         @Override
         public void onProductDetailsResponse(
             final BillingResult result,
-            final List<ProductDetails> productDetailsList) {
+            final QueryProductDetailsResult queryProductDetailsResult) {
+          final List<ProductDetails> productDetailsList =
+              queryProductDetailsResult != null
+                  ? queryProductDetailsResult.getProductDetailsList()
+                  : null;
           mBillingClientResult = result;
           if (result.getResponseCode() != BillingResponseCode.OK) {
             Log.w(mTag, "queryAllProductDetails() -> Failed: Unsuccessful query. "

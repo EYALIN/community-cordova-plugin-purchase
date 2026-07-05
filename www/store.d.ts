@@ -1,165 +1,73 @@
-declare namespace ModuleIapticJS {
-    type ProductType = 'subscription' | 'consumable' | 'non_consumable' | 'paid subscription';
-    interface PricingPhase {
-        priceMicros: number;
-        currency: string;
-        billingPeriod: string;
-        recurrenceMode: 'INFINITE_RECURRING' | 'NON_RECURRING' | 'FINITE_RECURRING';
-        paymentMode: 'PayAsYouGo' | 'PayUpFront';
-    }
-    interface Offer {
-        id: string;
-        platform: string;
-        offerType: 'Subscription' | 'Default';
-        pricingPhases: PricingPhase[];
-    }
-    interface Product {
-        type: ProductType;
-        id: string;
-        title: string;
-        description?: string;
-        offers: Offer[];
-        metadata?: Record<string, any>;
-        platform?: string;
-    }
-    interface Purchase {
-        purchaseId: string;
-        transactionId: string;
-        productId: string;
-        platform: 'stripe';
-        purchaseDate: string;
-        lastRenewalDate: string;
-        expirationDate: string;
-        renewalIntent: 'Renew' | 'Cancel';
-        isTrialPeriod: boolean;
-        amountMicros: number;
-        currency: string;
-    }
-    interface Order {
-        offerId: string;
-        applicationUsername: string;
-        successUrl: string;
-        cancelUrl: string;
-        accessToken?: string;
-    }
-    interface PlanChange {
-        purchaseId: string;
-        offerId: string;
-        accessToken?: string;
-    }
-    interface Config {
-        type: 'stripe';
-        stripePublicKey: string;
-        appName: string;
-        apiKey: string;
-        customIapticUrl?: string;
-    }
-    interface GetProductsResponse {
-        ok: boolean;
-        products: Product[];
-    }
-    interface PostCheckoutSessionResponse {
-        ok: boolean;
-        url: string;
-        accessToken: string;
-    }
-    interface GetPurchasesResponse {
-        ok: boolean;
-        purchases: Purchase[];
-        newAccessToken?: string;
-    }
-    interface ChangePlanResponse {
-        ok: boolean;
-        purchase: Purchase;
-        newAccessToken?: string;
-    }
-    class IapticStripe {
-        constructor(config: Config);
-        getProducts(): Promise<Product[]>;
-        refreshProducts(): Promise<Product[]>;
-        getAccessToken(): string | undefined;
-        order(params: Order): Promise<void>;
-        getPurchases(accessToken?: string): Promise<Purchase[]>;
-        redirectToCustomerPortal(params: { returnUrl?: string; accessToken?: string }): Promise<void>;
-        changePlan(planChange: PlanChange): Promise<Purchase>;
-        clearStoredData(): void;
-    }
-    class Utils {
-        static formatCurrency(amountMicros: number, currency: string): string;
-        static formatBillingPeriodEN(period: string): string;
-        static base64Encode(str: string): string;
-        static buildUrl(baseUrl: string, params: Record<string, string>): string;
-    }
-    function createAdapter(config: Config): IapticStripe;
-}
-
+/// <reference path="../src/ts/platforms/iaptic-js/iaptic-js-types.d.ts" />
 declare namespace CdvPurchase {
     /**
      * Error codes
      */
     enum ErrorCode {
         /** Error: Failed to intialize the in-app purchase library */
-        SETUP = 6777001,
+        SETUP,
         /** Error: Failed to load in-app products metadata */
-        LOAD = 6777002,
+        LOAD,
         /** Error: Failed to make a purchase */
-        PURCHASE = 6777003,
+        PURCHASE,
         /** Error: Failed to load the purchase receipt */
-        LOAD_RECEIPTS = 6777004,
+        LOAD_RECEIPTS,
         /** Error: Client is not allowed to issue the request */
-        CLIENT_INVALID = 6777005,
+        CLIENT_INVALID,
         /** Error: Purchase flow has been cancelled by user */
-        PAYMENT_CANCELLED = 6777006,
+        PAYMENT_CANCELLED,
         /** Error: Something is suspicious about a purchase */
-        PAYMENT_INVALID = 6777007,
+        PAYMENT_INVALID,
         /** Error: The user is not allowed to make a payment */
-        PAYMENT_NOT_ALLOWED = 6777008,
+        PAYMENT_NOT_ALLOWED,
         /** Error: Unknown error */
-        UNKNOWN = 6777010,
+        UNKNOWN,
         /** Error: Failed to refresh the purchase receipt */
-        REFRESH_RECEIPTS = 6777011,
+        REFRESH_RECEIPTS,
         /** Error: The product identifier is invalid */
-        INVALID_PRODUCT_ID = 6777012,
+        INVALID_PRODUCT_ID,
         /** Error: Cannot finalize a transaction or acknowledge a purchase */
-        FINISH = 6777013,
+        FINISH,
         /** Error: Failed to communicate with the server */
-        COMMUNICATION = 6777014,
+        COMMUNICATION,
         /** Error: Subscriptions are not available */
-        SUBSCRIPTIONS_NOT_AVAILABLE = 6777015,
+        SUBSCRIPTIONS_NOT_AVAILABLE,
         /** Error: Purchase information is missing token */
-        MISSING_TOKEN = 6777016,
+        MISSING_TOKEN,
         /** Error: Verification of store data failed */
-        VERIFICATION_FAILED = 6777017,
+        VERIFICATION_FAILED,
         /** Error: Bad response from the server */
-        BAD_RESPONSE = 6777018,
+        BAD_RESPONSE,
         /** Error: Failed to refresh the store */
-        REFRESH = 6777019,
+        REFRESH,
         /** Error: Payment has expired */
-        PAYMENT_EXPIRED = 6777020,
+        PAYMENT_EXPIRED,
         /** Error: Failed to download the content */
-        DOWNLOAD = 6777021,
+        DOWNLOAD,
         /** Error: Failed to update a subscription */
-        SUBSCRIPTION_UPDATE_NOT_AVAILABLE = 6777022,
+        SUBSCRIPTION_UPDATE_NOT_AVAILABLE,
         /** Error: The requested product is not available in the store. */
-        PRODUCT_NOT_AVAILABLE = 6777023,
+        PRODUCT_NOT_AVAILABLE,
         /** Error: The user has not allowed access to Cloud service information */
-        CLOUD_SERVICE_PERMISSION_DENIED = 6777024,
+        CLOUD_SERVICE_PERMISSION_DENIED,
         /** Error: The device could not connect to the network. */
-        CLOUD_SERVICE_NETWORK_CONNECTION_FAILED = 6777025,
+        CLOUD_SERVICE_NETWORK_CONNECTION_FAILED,
         /** Error: The user has revoked permission to use this cloud service. */
-        CLOUD_SERVICE_REVOKED = 6777026,
+        CLOUD_SERVICE_REVOKED,
         /** Error: The user has not yet acknowledged Apple’s privacy policy */
-        PRIVACY_ACKNOWLEDGEMENT_REQUIRED = 6777027,
+        PRIVACY_ACKNOWLEDGEMENT_REQUIRED,
         /** Error: The app is attempting to use a property for which it does not have the required entitlement. */
-        UNAUTHORIZED_REQUEST_DATA = 6777028,
+        UNAUTHORIZED_REQUEST_DATA,
         /** Error: The offer identifier is invalid. */
-        INVALID_OFFER_IDENTIFIER = 6777029,
+        INVALID_OFFER_IDENTIFIER,
         /** Error: The price you specified in App Store Connect is no longer valid. */
-        INVALID_OFFER_PRICE = 6777030,
+        INVALID_OFFER_PRICE,
         /** Error: The signature in a payment discount is not valid. */
-        INVALID_SIGNATURE = 6777031,
+        INVALID_SIGNATURE,
         /** Error: Parameters are missing in a payment discount. */
-        MISSING_OFFER_PARAMS = 6777032,
+        MISSING_OFFER_PARAMS,
+        /** Error: The store is blocked (e.g. Google Play blocking purchases). */
+        STORE_BLOCKED,
         /**
          * Server code used when a subscription expired.
          *
@@ -442,6 +350,7 @@ declare namespace CdvPurchase {
             adapters: Adapters;
             validator_privacy_policy: PrivacyPolicyItem | PrivacyPolicyItem[] | undefined;
             getApplicationUsername(): string | undefined;
+            obfuscateUsername: (applicationUsername: string, platform: CdvPurchase.Platform) => string | undefined;
             verifiedCallbacks: Callbacks<VerifiedReceipt>;
             unverifiedCallbacks: Callbacks<UnverifiedReceipt>;
             finish(receipt: VerifiedReceipt): Promise<void>;
@@ -470,6 +379,9 @@ declare namespace CdvPurchase {
             private runOnReceipt;
             private runValidatorFunction;
             private buildRequestBody;
+            /** Check if the products array should be included in the validation request.
+             *  Returns true at most once per day, tracked via localStorage. */
+            private shouldSendProducts;
             /**
              * For each md5-hashed values of the validator request's ".transaction" field,
              * store the response from the server.
@@ -534,13 +446,52 @@ declare namespace CdvPurchase {
             listener: AdapterListener;
             /** Retrieves the application username */
             getApplicationUsername: () => string | undefined;
+            /** Obfuscate the application username for the given platform */
+            obfuscateUsername: (applicationUsername: string, platform: CdvPurchase.Platform) => string | undefined;
+            /** The obfuscation strategy */
+            obfuscator?: CdvPurchase.Obfuscator;
             /** Functions used to decorate the API */
             apiDecorators: ProductDecorator & TransactionDecorator & OfferDecorator & ReceiptDecorator;
+            /** Collection of per-platform storefront values. */
+            readonly storefronts: Storefronts;
         }
         /**
          * The list of active platform adapters
          */
         class Adapters {
+            /**
+             * Registry of adapter factories for dynamic adapter registration.
+             *
+             * This allows third-party adapters to be registered without modifying the core library.
+             */
+            private static adapterFactories;
+            /**
+             * Register a custom adapter factory for a platform.
+             *
+             * Use this to add support for platforms not built into the library.
+             *
+             * @param platform - The platform identifier
+             * @param factory - A function that creates an Adapter instance
+             *
+             * @example
+             * ```typescript
+             * CdvPurchase.Internal.Adapters.registerAdapter(
+             *     'my-custom-platform' as CdvPurchase.Platform,
+             *     (context, options) => new MyCustomAdapter(context, options)
+             * );
+             * ```
+             */
+            static registerAdapter(platform: Platform, factory: (context: AdapterContext, options: object) => Adapter): void;
+            /**
+             * Check if a custom adapter factory is registered for a platform.
+             */
+            static hasAdapterFactory(platform: Platform): boolean;
+            /**
+             * Create an adapter instance using a registered factory.
+             *
+             * @returns The adapter instance, or undefined if no factory is registered.
+             */
+            private static createAdapter;
             /**
              * List of instantiated adapters.
              *
@@ -570,6 +521,51 @@ declare namespace CdvPurchase {
 }
 declare namespace CdvPurchase {
     namespace Internal {
+        /**
+         * Collection of per-platform storefront country codes.
+         *
+         * Maintains the cached value for each platform that exposes one and
+         * notifies listeners when a value changes. Adapter-agnostic — callers
+         * are responsible for validating that a platform has a ready adapter.
+         */
+        class Storefronts {
+            /** Cached country code per platform. */
+            private values;
+            /** Registered change listeners. */
+            private callbacks;
+            constructor(logger: Logger);
+            /**
+             * Refresh the cached value for a given adapter.
+             *
+             * The returned promise:
+             *   - resolves when the adapter responds within `timeoutMs`
+             *   - rejects with a timeout error otherwise
+             *
+             * Regardless of timeout, if the adapter eventually yields a value,
+             * the cache is silently updated and listeners are notified.
+             * A failed or empty response never overwrites the cache.
+             */
+            refreshWith(adapter: Adapter, timeoutMs?: number): Promise<void>;
+            /**
+             * Retrieve a storefront value.
+             *
+             * - With a platform: always returns `{ platform, countryCode }`,
+             *   where `countryCode` may be undefined if nothing is cached.
+             * - Without a platform: returns the first cached non-empty
+             *   storefront, or `undefined` if nothing is cached.
+             */
+            getValueFor(platform?: Platform): Storefront | undefined;
+            /** Register a change listener. */
+            listen(cb: Callback<Storefront>, callbackName?: string): void;
+            /** Remove a previously registered listener. */
+            off(cb: Callback<Storefront>): void;
+            /** Update the cache and notify listeners on change. */
+            private setValue;
+        }
+    }
+}
+declare namespace CdvPurchase {
+    namespace Internal {
         interface StoreAdapterDelegate {
             initiatedCallbacks: Callbacks<Transaction>;
             approvedCallbacks: Callbacks<Transaction>;
@@ -578,6 +574,8 @@ declare namespace CdvPurchase {
             updatedCallbacks: Callbacks<Product>;
             updatedReceiptCallbacks: Callbacks<Receipt>;
             receiptsReadyCallbacks: Callbacks<void>;
+            /** Finish a duplicate subscription transaction at the native level so StoreKit won't re-deliver it */
+            finishDuplicate(transaction: Transaction): void;
         }
         /**
          * Monitor the updates for products and receipt.
@@ -596,6 +594,21 @@ declare namespace CdvPurchase {
                 [transactionToken: string]: TransactionState;
             };
             static makeTransactionToken(transaction: Transaction): string;
+            /**
+             * Create a subscription dedup key from a transaction.
+             *
+             * StoreKit 2 can deliver the same subscription purchase event twice with
+             * different `transactionId` but identical `originalTransactionId` and
+             * `purchaseDate`. This key groups those duplicates together so only one
+             * `approved`/`finished` event is surfaced per billing period.
+             *
+             * Returns `undefined` for non-subscription transactions (no `originalTransactionId`).
+             */
+            static makeSubscriptionKey(transaction: Transaction): string | undefined;
+            /** Remember the first transactionId for each subscription dedup key */
+            subscriptionFirstTransactionId: {
+                [subscriptionKey: string]: string;
+            };
             /** Store the listener's latest calling time (in ms) for a given transaction at a given state */
             lastCallTimeForState: {
                 [transactionTokenWithState: string]: number;
@@ -710,7 +723,9 @@ declare namespace CdvPurchase {
         /**
          * Name of the group your subscription product is a member of.
          *
-         * If you don't set anything, all subscription will be members of the same group.
+         * When set, purchasing a subscription in a group will replace the currently
+         * owned one (on Google Play, this triggers the subscription replacement flow).
+         * When not set, subscriptions are independent — no automatic replacement.
          */
         group?: string;
     }
@@ -846,6 +861,24 @@ declare namespace CdvPurchase {
         }
     }
 }
+declare namespace CdvPurchase {
+    namespace Utils {
+        /**
+         * Convert a string to a UUIDv3-like format using MD5 hashing.
+         *
+         * Takes an input string, computes its MD5 hash, then formats the 32 hex
+         * characters as a UUID with version nibble set to '3' (MD5) and variant
+         * nibble set to '8' (RFC 4122).
+         *
+         * This produces a deterministic, valid UUID suitable for Apple's SK2
+         * `appAccountToken` and Google Play's `obfuscatedAccountId`.
+         *
+         * @param str - The input string to hash and format
+         * @returns A UUIDv3-like string (36 chars with dashes), or empty string if input is empty
+         */
+        function md5toUUID(str: string): string;
+    }
+}
 /**
  * Namespace for the cordova-plugin-purchase plugin.
  *
@@ -878,7 +911,7 @@ declare namespace CdvPurchase {
     /**
      * Current release number of the plugin.
      */
-    const PLUGIN_VERSION = "13.12.1";
+    const PLUGIN_VERSION = "13.17.2";
     /**
      * Entry class of the plugin.
      */
@@ -920,14 +953,44 @@ declare namespace CdvPurchase {
         /**
          * Return the identifier of the user for your application.
          *
-         * **Note:** Apple AppStore requires an UUIDv4 if you want it to appear as the "appAccountToken" in
-         * the transaction data.
+         * This value is obfuscated according to {@link Store.obfuscator} before being
+         * sent to the native platform API. The default obfuscator (`'legacy'`) hashes
+         * or formats the value so the original username is never transmitted in cleartext.
+         *
+         * For Apple's App Store, the obfuscated value is used as `appAccountToken`
+         * (which must be a valid UUID when using StoreKit 2).
+         *
+         * You can also pass it per-transaction via `additionalData.applicationUsername`
+         * in `store.order()` or `store.requestPayment()`, which takes priority.
          */
         applicationUsername?: string | (() => string | undefined);
         /**
          * Get the application username as a string by either calling or returning {@link Store.applicationUsername}
         */
         getApplicationUsername(): string | undefined;
+        /**
+         * Obfuscation strategy for the application username.
+         *
+         * Controls how `applicationUsername` is transformed before being sent
+         * to each platform's native API. `'uuid'` is the recommended setting
+         * for new integrations; the default `'legacy'` exists only for
+         * backward compatibility with server-side modules that already
+         * correlate against the raw 32-hex MD5 value.
+         *
+         * @default 'legacy'
+         * @see {@link Obfuscator}
+         */
+        obfuscator?: CdvPurchase.Obfuscator;
+        /** @internal Tracks whether the info notice for 'legacy' has been emitted */
+        private _legacyObfuscatorNoticeEmitted;
+        /**
+         * Obfuscate the application username according to the configured obfuscation strategy.
+         *
+         * See {@link Obfuscator} for the per-mode output format.
+         *
+         * @internal
+         */
+        obfuscateUsername(applicationUsername: string, platform: CdvPurchase.Platform): string | undefined;
         /**
          * URL or implementation of the receipt validation service
          *
@@ -996,6 +1059,8 @@ declare namespace CdvPurchase {
         private receiptsVerifiedCallbacks;
         /** Callbacks for errors */
         private errorCallbacks;
+        /** Per-platform storefront cache and change notifications. */
+        private _storefronts;
         /** Internal implementation of the receipt validation service integration */
         private _validator;
         /** Monitor state changes for transactions */
@@ -1165,18 +1230,6 @@ declare namespace CdvPurchase {
             platform?: Platform;
         } | string): boolean;
         /**
-         * Check ownership status from verified receipts only.
-         *
-         * This is useful for iOS where StoreKit 1 doesn't automatically provide subscription
-         * transaction data on app restart. After calling restorePurchases() and waiting for
-         * receiptsVerified event, this method can be used to check if a product is owned
-         * based solely on the verified receipt data.
-         *
-         * @param productId - The product identifier to check, or undefined to check any product
-         * @returns Object with ownership details including isOwned, expiryDate, and purchase info
-         */
-        checkVerifiedReceiptsOwnership(productId?: string): VerifiedReceiptOwnershipResult;
-        /**
          * Place an order for a given offer.
          */
         order(offer: Offer, additionalData?: AdditionalData): Promise<IError | undefined>;
@@ -1241,6 +1294,29 @@ declare namespace CdvPurchase {
          *     store.manageBilling(purchase.platform);
          */
         manageBilling(platform?: Platform): Promise<IError | undefined>;
+        /**
+         * Retrieve the billing country code from the platform's storefront.
+         *
+         * Returns a `Storefront` object with the platform and its ISO 3166-1
+         * alpha-2 country code (e.g., "US", "FR"). The country code may be
+         * undefined if the underlying fetch has not yet completed or failed —
+         * the platform is still reported. Returns `undefined` only when no
+         * matching adapter is ready.
+         *
+         * The cache is populated before the `storeReady` event fires (with a
+         * best-effort timeout), and refreshed after orders and `restorePurchases()`.
+         *
+         * @param platform - Optional platform. If omitted, returns the first
+         *                   cached non-empty storefront, or a `{ platform, countryCode: undefined }`
+         *                   object for the first ready adapter.
+         *
+         * @example
+         * const storefront = store.getStorefront();
+         * if (storefront?.countryCode) {
+         *     console.log(`Billing country: ${storefront.countryCode}`);
+         * }
+         */
+        getStorefront(platform?: Platform): Storefront | undefined;
         /**
          * The default payment platform to use depending on the OS.
          *
@@ -1458,6 +1534,31 @@ declare namespace CdvPurchase {
          * Might ask the user to login.
          */
         restorePurchases(): Promise<IError | undefined>;
+        /**
+         * Retrieve the billing country code from the platform's storefront.
+         *
+         * Returns an ISO 3166-1 alpha-2 country code (e.g., "US", "FR"),
+         * or undefined if the storefront information is not available.
+         */
+        getStorefront?(): Promise<string | undefined>;
+    }
+    /**
+     * A storefront country code, scoped to a specific payment platform.
+     *
+     * Returned from {@link Store.getStorefront} and passed to
+     * `when().storefrontUpdated()` listeners.
+     */
+    interface Storefront {
+        /** The platform this storefront belongs to. */
+        readonly platform: Platform;
+        /**
+         * ISO 3166-1 alpha-2 country code (e.g., "US", "FR").
+         *
+         * Undefined if the value has not been fetched yet, or if the fetch
+         * failed. Never set to a falsy value once populated — a later failed
+         * refresh will preserve the previously-known country code.
+         */
+        readonly countryCode?: string;
     }
     /**
      * Data to attach to a transaction.
@@ -1466,8 +1567,26 @@ declare namespace CdvPurchase {
      * @see {@link Store.requestPayment}
      */
     interface AdditionalData {
-        /** The application's user identifier, will be obfuscated with md5 to fill `accountId` if necessary */
+        /**
+         * The application's user identifier.
+         *
+         * @deprecated Set {@link Store.applicationUsername} instead. The
+         * per-transaction value is ignored — adapters always read the
+         * store-level username so receipt validation later (which doesn't
+         * have access to the original additionalData) sees the same value
+         * that was sent to the native API at purchase time. Passing this
+         * field logs a one-shot notice.
+         */
         applicationUsername?: string;
+        /**
+         * Quantity of items to purchase.
+         *
+         * Only supported on platforms that report the `'orderQuantity'` capability.
+         * Platforms without support will ignore this field.
+         *
+         * @see {@link Store.checkSupport}
+         */
+        quantity?: number;
         /** GooglePlay specific additional data */
         googlePlay?: GooglePlay.AdditionalData;
         /** Braintree specific additional data */
@@ -1475,6 +1594,38 @@ declare namespace CdvPurchase {
         /** Apple AppStore specific additional data */
         appStore?: AppleAppStore.AdditionalData;
     }
+    /**
+     * Obfuscation strategy for the application username.
+     *
+     * Controls how `applicationUsername` is transformed before being sent to
+     * each platform's native API.
+     *
+     * - `'uuid'` — **Recommended.** MD5 hash formatted as UUIDv3 on all
+     *   platforms. Deterministic, valid UUID, works as Apple's
+     *   `appAccountToken` (SK1 + SK2) and Google Play's
+     *   `obfuscatedAccountId`.
+     *
+     * - `'legacy'` (default) — Only use this when an existing server-side
+     *   integration already correlates against the original 32-hex MD5 value
+     *   sent on Google Play. New integrations should pick `'uuid'`.
+     *   - Google Play: raw MD5 hash (32 hex chars)
+     *   - Apple AppStore (SK2): MD5 hash formatted as UUIDv3
+     *   - Apple AppStore (SK1, deprecated): raw username, unchanged
+     *   - Other platforms: MD5 hash formatted as UUIDv3
+     *
+     * - `'disabled'` — No obfuscation. The raw `applicationUsername` is
+     *   passed through to all platforms. For Apple SK2, the value must be a
+     *   valid UUID string or `appAccountToken` will not be set.
+     *
+     * - Custom function — `(username: string, platform: Platform) => string`.
+     *   Receives the raw username and platform, returns the obfuscated value.
+     *   For Apple (both SK1 and SK2), the function must return a valid UUID
+     *   string.
+     *
+     * @see {@link Store.obfuscator}
+     * @see {@link https://github.com/j3k0/cordova-plugin-purchase/issues/1665}
+     */
+    type Obfuscator = 'legacy' | 'uuid' | 'disabled' | ((applicationUsername: string, platform: Platform) => string);
     /**
      * Purchase platforms supported by the plugin
      */
@@ -1497,7 +1648,7 @@ declare namespace CdvPurchase {
      *
      * @see {@link Store.checkSupport}
      */
-    type PlatformFunctionality = 'requestPayment' | 'order' | 'manageSubscriptions' | 'manageBilling';
+    type PlatformFunctionality = 'requestPayment' | 'order' | 'orderQuantity' | 'manageSubscriptions' | 'manageBilling' | 'getStorefront';
     /**
      * Possible states of a transaction.
      *
@@ -1555,6 +1706,16 @@ declare namespace CdvPurchase {
          * If no platforms have any receipts (user made no purchase), this will also get called.
          */
         receiptsVerified(cb: Callback<void>, callbackName?: string): When;
+        /**
+         * Register a function called when a platform's storefront country code changes.
+         *
+         * Fires when a platform's cached value transitions to a different non-empty
+         * string. Does not fire for no-op refreshes, failed refreshes, or transitions
+         * to undefined (the cache preserves the last-known value).
+         *
+         * @param cb - Callback invoked with the updated {@link Storefront}
+         */
+        storefrontUpdated(cb: Callback<Storefront>, callbackName?: string): When;
     }
     /** Whether or not the user intends to let the subscription auto-renew. */
     enum RenewalIntent {
@@ -1567,44 +1728,6 @@ declare namespace CdvPurchase {
     enum PriceConsentStatus {
         NOTIFIED = "Notified",
         AGREED = "Agreed"
-    }
-    /**
-     * Information about a verified purchase returned by checkVerifiedReceiptsOwnership
-     */
-    interface VerifiedPurchaseInfo {
-        /** Product identifier */
-        id: string;
-        /** Platform this purchase was made on */
-        platform: Platform;
-        /** Whether this purchase is currently active (not expired) */
-        isActive?: boolean;
-        /** Whether this purchase is expired */
-        isExpired: boolean;
-        /** Date of first purchase (timestamp) */
-        purchaseDate?: number;
-        /** Date of expiry for subscriptions (timestamp) */
-        expiryDate?: number;
-        /** True when subscription is in trial period */
-        isTrialPeriod?: boolean;
-        /** True when subscription is in introductory pricing period */
-        isIntroPeriod?: boolean;
-        /** True when subscription is in billing retry period */
-        isBillingRetryPeriod?: boolean;
-        /** Renewal intent */
-        renewalIntent?: string;
-    }
-    /**
-     * Result of checkVerifiedReceiptsOwnership
-     */
-    interface VerifiedReceiptOwnershipResult {
-        /** True if any of the checked products is owned (active subscription or valid purchase) */
-        isOwned: boolean;
-        /** Latest expiry date among all active subscriptions (timestamp) */
-        latestExpiryDate?: number;
-        /** Warning message if there was an issue checking ownership */
-        warning?: string;
-        /** List of all verified purchases found */
-        purchases: VerifiedPurchaseInfo[];
     }
     /** Reason why a subscription has been canceled */
     enum CancelationReason {
@@ -1945,8 +2068,9 @@ declare namespace CdvPurchase {
          * For consumable products, this value represents the number of items purchased.
          * For non-consumable products and subscriptions, this value is always 1.
          *
-         * This is only supported on Android (Google Play) platform when using the multi-quantity purchase feature.
-         * On other platforms, the quantity is always 1.
+         * Supported on Android (Google Play) and iOS (Apple AppStore).
+         * Use `additionalData.quantity` when placing an order
+         * to purchase multiple units in a single transaction.
          */
         quantity?: number;
         /** Purchased products */
@@ -2672,6 +2796,13 @@ declare namespace CdvPurchase {
             /** List of products loaded from AppStore */
             _products: SKProduct[];
             get products(): Product[];
+            /**
+             * Resolve the username string passed to the native bridge for a
+             * purchase. SK1 + 'legacy' keeps the raw username for backward
+             * compatibility; every other mode obfuscates through the
+             * configured strategy. 'disabled' always returns the raw value.
+             */
+            private resolveBridgeUsername;
             /** Find a given product from ID */
             getProduct(id: string): SKProduct | undefined;
             /** The application receipt, contains all transactions */
@@ -2681,7 +2812,9 @@ declare namespace CdvPurchase {
             get receipts(): Receipt[];
             private validProducts;
             addValidProducts(registerProducts: IRegisterProduct[], validProducts: Bridge.ValidProduct[]): void;
-            bridge: Bridge.Bridge;
+            bridge: Bridge.BridgeInterface;
+            /** True when the StoreKit 2 extension is active */
+            readonly useSK2: boolean;
             context: CdvPurchase.Internal.AdapterContext;
             log: Logger;
             /** Component that determine eligibility to a given discount offer */
@@ -2737,6 +2870,139 @@ declare namespace CdvPurchase {
             checkSupport(functionality: PlatformFunctionality): boolean;
             restorePurchases(): Promise<IError | undefined>;
             presentCodeRedemptionSheet(): Promise<void>;
+            getStorefront(): Promise<string | undefined>;
+        }
+    }
+}
+declare namespace CdvPurchase {
+    namespace AppleAppStore {
+        namespace CapacitorBridge {
+            /** Extended callbacks with SK2 fields (same as SK2BridgeCallbacks) */
+            interface CapacitorBridgeCallbacks extends Bridge.BridgeCallbacks {
+                purchased: (transactionIdentifier: string, productId: string, originalTransactionIdentifier?: string, transactionDate?: string, discountId?: string, expirationDate?: string, jwsRepresentation?: string, quantity?: number) => void;
+                restored: (transactionIdentifier: string, productId: string, originalTransactionIdentifier?: string, transactionDate?: string, discountId?: string, expirationDate?: string, jwsRepresentation?: string, quantity?: number) => void;
+            }
+            class CapacitorNativeBridge implements Bridge.BridgeInterface {
+                appStoreReceipt: ApplicationReceipt | null;
+                transactionsForProduct: {
+                    [productId: string]: string[];
+                };
+                readonly isSK2 = true;
+                private options;
+                private pendingTransactionUpdates;
+                private initialized;
+                private needRestoreNotification;
+                constructor();
+                /** Check if the Capacitor purchase plugin is available */
+                static isAvailable(): boolean;
+                private get plugin();
+                init(options: Partial<Bridge.BridgeOptions>, success: () => void, error: (code: ErrorCode, message: string) => void): void;
+                load(productIds: string[], success: (validProducts: Bridge.ValidProduct[], invalidProductIds: string[]) => void, error: (code: ErrorCode, message: string) => void): void;
+                purchase(productId: string, quantity: number, applicationUsername: string | undefined, discount: PaymentDiscount | undefined, success: () => void, error: () => void): void;
+                finish(transactionId: string, success: () => void, error: (msg: string) => void): void;
+                canMakePayments(success: () => void, error: (message: string) => void): void;
+                restore(callback?: Callback<any>): void;
+                manageSubscriptions(callback?: Callback<any>): void;
+                manageBilling(callback?: Callback<any>): void;
+                presentCodeRedemptionSheet(callback?: Callback<any>): void;
+                refreshReceipts(successCb: (receipt: ApplicationReceipt) => void, errorCb: (code: ErrorCode, message: string) => void): void;
+                loadReceipts(callback: (receipt: ApplicationReceipt) => void, errorCb: (code: ErrorCode, message: string) => void): void;
+                private transactionUpdated;
+                private restoreCompletedTransactionsFinished;
+                private restoreCompletedTransactionsFailed;
+                /** Retrieve the storefront country code from StoreKit */
+                getStorefront(): Promise<string | undefined>;
+            }
+        }
+    }
+}
+declare namespace CdvPurchase {
+    namespace AppleAppStore {
+        /** Global type for the SK2 extension plugin marker */
+        interface CdvPurchaseStoreKit2 {
+            installed?: boolean;
+            version?: string;
+        }
+        namespace Bridge {
+            /**
+             * Shared interface implemented by both the SK1 and SK2 bridges.
+             * The adapter programs against this interface, not a concrete class.
+             */
+            interface BridgeInterface {
+                /** Cached app store receipt */
+                appStoreReceipt?: ApplicationReceipt | null;
+                /** Transaction IDs grouped by product */
+                transactionsForProduct: {
+                    [productId: string]: string[];
+                };
+                /** Whether this bridge uses StoreKit 2 */
+                readonly isSK2?: boolean;
+                /** Resolves when pending transactions from the native queue have been processed */
+                pendingTransactionsReady?: Promise<void>;
+                init(options: Partial<BridgeOptions>, success: () => void, error: (code: ErrorCode, message: string) => void): void;
+                load(productIds: string[], success: (validProducts: ValidProduct[], invalidProductIds: string[]) => void, error: (code: ErrorCode, message: string) => void): void;
+                purchase(productId: string, quantity: number, applicationUsername: string | undefined, discount: PaymentDiscount | undefined, success: () => void, error: () => void): void;
+                finish(transactionId: string, success: () => void, error: (msg: string) => void): void;
+                canMakePayments(success: () => void, error: (message: string) => void): void;
+                restore(callback?: Callback<any>): void;
+                manageSubscriptions(callback?: Callback<any>): void;
+                manageBilling(callback?: Callback<any>): void;
+                presentCodeRedemptionSheet(callback?: Callback<any>): void;
+                refreshReceipts(successCb: (receipt: ApplicationReceipt) => void, errorCb: (code: ErrorCode, message: string) => void): void;
+                loadReceipts(callback: (receipt: ApplicationReceipt) => void, errorCb: (code: ErrorCode, message: string) => void): void;
+                /** Retrieve the storefront country code (alpha-3 on iOS) */
+                getStorefront?(): Promise<string | undefined>;
+            }
+        }
+    }
+}
+declare namespace CdvPurchase {
+    namespace AppleAppStore {
+        namespace SK2Bridge {
+            /** Extended callbacks with SK2 fields */
+            interface SK2BridgeCallbacks extends Bridge.BridgeCallbacks {
+                purchased: (transactionIdentifier: string, productId: string, originalTransactionIdentifier?: string, transactionDate?: string, discountId?: string, expirationDate?: string, jwsRepresentation?: string, quantity?: number) => void;
+                restored: (transactionIdentifier: string, productId: string, originalTransactionIdentifier?: string, transactionDate?: string, discountId?: string, expirationDate?: string, jwsRepresentation?: string, quantity?: number) => void;
+            }
+            class SK2NativeBridge implements Bridge.BridgeInterface {
+                options: SK2BridgeCallbacks;
+                transactionsForProduct: {
+                    [productId: string]: string[];
+                };
+                private initialized;
+                appStoreReceipt?: AppleAppStore.ApplicationReceipt | null;
+                private registeredProducts;
+                private needRestoreNotification;
+                pendingTransactionsReady?: Promise<void>;
+                private _pendingTransactionsResolve?;
+                private pendingUpdates;
+                /** True when this bridge is active (SK2 extension installed + iOS 15+) */
+                readonly isSK2 = true;
+                constructor();
+                /** Check if the SK2 extension plugin is installed */
+                static isAvailable(): boolean;
+                init(options: Partial<Bridge.BridgeOptions>, success: () => void, error: (code: ErrorCode, message: string) => void): void;
+                processPendingTransactions(): void;
+                purchase(productId: string, quantity: number, applicationUsername: string | undefined, discount: PaymentDiscount | undefined, success: () => void, error: () => void): void;
+                canMakePayments(success: () => void, error: (message: string) => void): void;
+                restore(callback?: Callback<any>): void;
+                manageSubscriptions(callback?: Callback<any>): void;
+                manageBilling(callback?: Callback<any>): void;
+                presentCodeRedemptionSheet(callback?: Callback<any>): void;
+                load(productIds: string[], success: (validProducts: Bridge.ValidProduct[], invalidProductIds: string[]) => void, error: (code: ErrorCode, message: string) => void): void;
+                finish(transactionId: string, success: () => void, error: (msg: string) => void): void;
+                finalizeTransactionUpdates(): void;
+                lastTransactionUpdated(): void;
+                /** Called from native. Same as SK1 but with extra SK2 fields. */
+                transactionUpdated(state: Bridge.TransactionState, errorCode: ErrorCode | undefined, errorText: string | undefined, transactionIdentifier: string, productId: string, transactionReceipt: never, originalTransactionIdentifier: string | undefined, transactionDate: string | undefined, discountId: string | undefined, expirationDate?: string | undefined, jwsRepresentation?: string | undefined, quantity?: number | undefined): void;
+                restoreCompletedTransactionsFinished(): void;
+                restoreCompletedTransactionsFailed(errorCode: ErrorCode): void;
+                parseReceiptArgs(args: [string, string, string, number, string]): ApplicationReceipt;
+                refreshReceipts(successCb: (receipt: ApplicationReceipt) => void, errorCb: (code: ErrorCode, message: string) => void): void;
+                /** Retrieve the storefront country code from StoreKit */
+                getStorefront(): Promise<string | undefined>;
+                loadReceipts(callback: (receipt: ApplicationReceipt) => void, errorCb: (code: ErrorCode, message: string) => void): void;
+            }
         }
     }
 }
@@ -2807,6 +3073,15 @@ declare namespace CdvPurchase {
                 introPricePeriodUnit?: IPeriodUnit;
                 /** Payment mode for introductory price */
                 introPricePaymentMode?: PaymentMode;
+                /**
+                 * Whether the user is eligible for the introductory price.
+                 *
+                 * Populated from StoreKit 2's `Product.SubscriptionInfo.isEligibleForIntroOffer`
+                 * when running on SK2 (iOS 15+). Absent on SK1 and on older native builds that
+                 * don't surface it — in which case the discount eligibility determiner is used
+                 * as before.
+                 */
+                introPriceEligible?: boolean;
                 /** Available discount offers */
                 discounts?: Discount[];
                 /** Group this product is member of */
@@ -2852,7 +3127,7 @@ declare namespace CdvPurchase {
                 /** Called when the bridge is ready (after setup) */
                 ready: () => void;
                 /** Called when a transaction is in "Purchased" state */
-                purchased: (transactionIdentifier: string, productId: string, originalTransactionIdentifier?: string, transactionDate?: string, discountId?: string) => void;
+                purchased: (transactionIdentifier: string, productId: string, originalTransactionIdentifier?: string, transactionDate?: string, discountId?: string, expirationDate?: string, jwsRepresentation?: string, quantity?: number) => void;
                 /** Called when a transaction has been enqueued */
                 purchaseEnqueued: (productId: string, quantity: number) => void;
                 /**
@@ -2870,7 +3145,7 @@ declare namespace CdvPurchase {
                 /** Called when a transaction is in "finished" state */
                 finished: (transactionIdentifier: string, productId: string) => void;
                 /** Called when a transaction is in "restored" state */
-                restored: (transactionIdentifier: string, productId: string) => void;
+                restored: (transactionIdentifier: string, productId: string, originalTransactionIdentifier?: string, transactionDate?: string, discountId?: string, expirationDate?: string, jwsRepresentation?: string, quantity?: number) => void;
                 /** Called when the application receipt is refreshed */
                 receiptsRefreshed: (receipt: ApplicationReceipt) => void;
                 /** Called when a call to "restore" failed */
@@ -2886,7 +3161,7 @@ declare namespace CdvPurchase {
                 /** Auto-finish transaction */
                 autoFinish: boolean;
             }
-            export class Bridge {
+            export class Bridge implements BridgeInterface {
                 /** Callbacks set by the adapter */
                 options: BridgeCallbacks;
                 /** Transactions for a given product */
@@ -2901,6 +3176,9 @@ declare namespace CdvPurchase {
                 private registeredProducts;
                 /** True if "restoreCompleted" or "restoreFailed" should be called when restore is done */
                 private needRestoreNotification;
+                /** Resolves when pending transactions from the native queue have been processed */
+                pendingTransactionsReady?: Promise<void>;
+                private _pendingTransactionsResolve?;
                 /** List of transaction updates to process */
                 private pendingUpdates;
                 constructor();
@@ -2963,11 +3241,13 @@ declare namespace CdvPurchase {
                 finish(transactionId: string, success: () => void, error: (msg: string) => void): void;
                 finalizeTransactionUpdates(): void;
                 lastTransactionUpdated(): void;
-                transactionUpdated(state: TransactionState, errorCode: ErrorCode | undefined, errorText: string | undefined, transactionIdentifier: string, productId: string, transactionReceipt: never, originalTransactionIdentifier: string | undefined, transactionDate: string | undefined, discountId: string | undefined): void;
+                transactionUpdated(state: TransactionState, errorCode: ErrorCode | undefined, errorText: string | undefined, transactionIdentifier: string, productId: string, transactionReceipt: never, originalTransactionIdentifier: string | undefined, transactionDate: string | undefined, discountId: string | undefined, quantity: number | undefined): void;
                 restoreCompletedTransactionsFinished(): void;
                 restoreCompletedTransactionsFailed(errorCode: ErrorCode): void;
                 parseReceiptArgs(args: RawReceiptArgs): ApplicationReceipt;
                 refreshReceipts(successCb: (receipt: ApplicationReceipt) => void, errorCb: (code: ErrorCode, message: string) => void): void;
+                /** Retrieve the storefront country code from StoreKit */
+                getStorefront(): Promise<string | undefined>;
                 loadReceipts(callback: (receipt: ApplicationReceipt) => void, errorCb: (code: ErrorCode, message: string) => void): void;
                 /** @deprecated */
                 onPurchased: boolean;
@@ -3002,6 +3282,28 @@ declare namespace CdvPurchase {
                 constructor(request: DiscountEligibilityRequest[], response: boolean[]);
                 isEligible(productId: string, discountType: DiscountType, discountId: string): boolean;
             }
+            /**
+             * Build the pair of (requests, native-provided answers) for every valid product.
+             *
+             * The two arrays are parallel: for each request, the matching `nativeAnswers` entry
+             * is either the native eligibility (from StoreKit 2's `isEligibleForIntroOffer`)
+             * or `undefined` if native did not provide one (SK1 / older native plugin).
+             *
+             * Only Introductory requests can carry a native answer — SK2 does not answer
+             * promotional offer eligibility at the adapter level.
+             */
+            function collectEligibilityRequests(validProducts: Bridge.ValidProduct[]): {
+                requests: DiscountEligibilityRequest[];
+                nativeAnswers: (boolean | undefined)[];
+            };
+            /**
+             * Overlay native-provided eligibility answers on top of a determiner response.
+             *
+             * Native wins on conflict — it's the authoritative source for StoreKit 2.
+             * Determiner response is used where native did not provide an answer (SK1
+             * or older native builds).
+             */
+            function mergeNativeEligibility(determinerResponse: boolean[], nativeAnswers: (boolean | undefined)[]): boolean[];
         }
     }
 }
@@ -3049,7 +3351,9 @@ declare namespace CdvPurchase {
         /** StoreKit transaction */
         class SKTransaction extends Transaction {
             originalTransactionId?: string;
-            refresh(productId?: string, originalTransactionIdentifier?: string, transactionDate?: string, discountId?: string): void;
+            /** JWS representation of the transaction (StoreKit 2 only) */
+            jwsRepresentation?: string;
+            refresh(productId?: string, originalTransactionIdentifier?: string, transactionDate?: string, discountId?: string, expirationDateMs?: string, jwsRepresentation?: string, quantity?: number): void;
         }
     }
 }
@@ -4430,7 +4734,7 @@ declare namespace CdvPurchase {
             get receipts(): Receipt[];
             private _receipts;
             /** The GooglePlay bridge */
-            bridge: Bridge.Bridge;
+            bridge: Bridge.BridgeInterface;
             /** Prevent double initialization */
             initialized: boolean;
             /** Used to retry failed commands */
@@ -4503,8 +4807,63 @@ declare namespace CdvPurchase {
             requestPayment(payment: PaymentRequest, additionalData?: CdvPurchase.AdditionalData): Promise<IError | Transaction | undefined>;
             manageSubscriptions(): Promise<IError | undefined>;
             manageBilling(): Promise<IError | undefined>;
+            getStorefront(): Promise<string | undefined>;
             checkSupport(functionality: PlatformFunctionality): boolean;
             restorePurchases(): Promise<IError | undefined>;
+        }
+    }
+}
+declare namespace CdvPurchase {
+    namespace GooglePlay {
+        namespace Bridge {
+            /**
+             * Capacitor implementation of the Google Play bridge.
+             * Uses Capacitor.Plugins.PurchasePlugin instead of cordova.exec().
+             */
+            class CapacitorBridge implements BridgeInterface {
+                options: Options;
+                /** Check if the Capacitor purchase plugin is available */
+                static isAvailable(): boolean;
+                private get plugin();
+                init(success: () => void, fail: ErrorCallback, options: Options): void;
+                load(success: () => void, fail: ErrorCallback, skus: string[], inAppSkus: string[], subsSkus: string[]): void;
+                getPurchases(success: () => void, fail: ErrorCallback): void;
+                buy(success: () => void, fail: ErrorCallback, productId: string, additionalData: CdvPurchase.AdditionalData): void;
+                subscribe(success: () => void, fail: ErrorCallback, productId: string, additionalData: CdvPurchase.AdditionalData): void;
+                consumePurchase(success: () => void, fail: ErrorCallback, purchaseToken: string): void;
+                acknowledgePurchase(success: () => void, fail: ErrorCallback, purchaseToken: string): void;
+                getAvailableProducts(inAppSkus: string[], subsSkus: string[], success: (validProducts: (InAppProduct | Subscription)[]) => void, fail: ErrorCallback): void;
+                manageSubscriptions(): void;
+                manageBilling(): void;
+                launchPriceChangeConfirmationFlow(productId: string): void;
+                getStorefront(success: (countryCode: string) => void, fail: ErrorCallback): void;
+            }
+        }
+    }
+}
+declare namespace CdvPurchase {
+    namespace GooglePlay {
+        namespace Bridge {
+            /**
+             * Shared interface for Google Play bridge implementations.
+             * Both Cordova and Capacitor bridges implement this interface.
+             * The adapter programs against this interface, not a concrete class.
+             */
+            interface BridgeInterface {
+                options: Options;
+                init(success: () => void, fail: ErrorCallback, options: Options): void;
+                load(success: () => void, fail: ErrorCallback, skus: string[], inAppSkus: string[], subsSkus: string[]): void;
+                getPurchases(success: () => void, fail: ErrorCallback): void;
+                buy(success: () => void, fail: ErrorCallback, productId: string, additionalData: CdvPurchase.AdditionalData): void;
+                subscribe(success: () => void, fail: ErrorCallback, productId: string, additionalData: CdvPurchase.AdditionalData): void;
+                consumePurchase(success: () => void, fail: ErrorCallback, purchaseToken: string): void;
+                acknowledgePurchase(success: () => void, fail: ErrorCallback, purchaseToken: string): void;
+                getAvailableProducts(inAppSkus: string[], subsSkus: string[], success: (validProducts: (InAppProduct | Subscription)[]) => void, fail: ErrorCallback): void;
+                manageSubscriptions(): void;
+                manageBilling(): void;
+                launchPriceChangeConfirmationFlow(productId: string): void;
+                getStorefront(success: (countryCode: string) => void, fail: ErrorCallback): void;
+            }
         }
     }
 }
@@ -4545,6 +4904,19 @@ declare namespace CdvPurchase {
                 price_amount_micros: number;
                 price_currency_code: string;
             }
+            /** One-time purchase offer details (new in Billing Library 8.0.0) */
+            interface InAppOffer {
+                /** Offer id associated with this offer (may be null for default offer) */
+                offer_id: string | null;
+                /** Token required to pass in launchBillingFlow to purchase with this offer */
+                offer_token: string;
+                /** Formatted price for display */
+                formatted_price: string;
+                /** Price in micro-units (divide by 1000000 to get numeric price) */
+                price_amount_micros: number;
+                /** ISO 4217 currency code */
+                price_currency_code: string;
+            }
             interface InAppProduct {
                 product_format: "v12.0" | "v11.0";
                 product_type: "inapp";
@@ -4556,6 +4928,8 @@ declare namespace CdvPurchase {
                 formatted_price?: string;
                 price?: string;
                 price_amount_micros?: number;
+                /** Array of offers for this product (new in Billing Library 8.0.0, only present in v12.0 format) */
+                offers?: InAppOffer[];
             }
         }
     }
@@ -4608,7 +4982,9 @@ declare namespace CdvPurchase {
             /**
              * Obfuscated user account identifier
              *
-             * Default to md5(store.applicationUsername)
+             * Populated by the adapter using `store.obfuscateUsername()`.
+             * Format depends on `store.obfuscator` setting.
+             * @see {@link CdvPurchase.Store.obfuscator}
              */
             accountId?: string;
             /**
@@ -4680,7 +5056,7 @@ declare namespace CdvPurchase {
                 signature: string;
                 /** String in JSON format that contains details about the purchase order. */
                 receipt: string;
-                /** Obfuscated account id specified at purchase - by default md5(applicationUsername) */
+                /** Obfuscated account id specified at purchase. Format depends on `store.obfuscator`. */
                 accountId: string;
                 /** Obfuscated profile id specified at purchase - used when a single user can have multiple profiles */
                 profileId: string;
@@ -4713,7 +5089,7 @@ declare namespace CdvPurchase {
                     purchase: Purchase;
                 };
             };
-            class Bridge {
+            class Bridge implements BridgeInterface {
                 options: Options;
                 init(success: () => void, fail: ErrorCallback, options: Options): void;
                 load(success: () => void, fail: ErrorCallback, skus: string[], inAppSkus: string[], subsSkus: string[]): void;
@@ -4726,6 +5102,7 @@ declare namespace CdvPurchase {
                 getAvailableProducts(inAppSkus: string[], subsSkus: string[], success: (validProducts: (InAppProduct | Subscription)[]) => void, fail: ErrorCallback): void;
                 manageSubscriptions(): void;
                 manageBilling(): void;
+                getStorefront(success: (countryCode: string) => void, fail: ErrorCallback): void;
                 launchPriceChangeConfirmationFlow(productId: string): void;
             }
         }
@@ -4737,6 +5114,13 @@ declare namespace CdvPurchase {
         }
         class InAppOffer extends CdvPurchase.Offer {
             type: string;
+            token?: string;
+            constructor(options: {
+                id: string;
+                product: GProduct;
+                pricingPhases: PricingPhase[];
+                token?: string;
+            }, decorator: Internal.OfferDecorator);
         }
         class SubscriptionOffer extends CdvPurchase.Offer {
             type: string;
@@ -5404,6 +5788,7 @@ declare namespace CdvPurchase {
             static verify(receipt: Receipt, callback: Callback<Internal.ReceiptResponse>): void;
             checkSupport(functionality: PlatformFunctionality): boolean;
             restorePurchases(): Promise<IError | undefined>;
+            getStorefront(): Promise<string | undefined>;
         }
     }
 }
@@ -5857,7 +6242,7 @@ declare namespace CdvPurchase {
             interface PrivacyPolicyProvider {
                 validator_privacy_policy: undefined | string | string[];
             }
-            function getDeviceInfo(store: PrivacyPolicyProvider): DeviceInfo;
+            function getDeviceInfo(store: PrivacyPolicyProvider): Promise<DeviceInfo>;
         }
     }
 }
@@ -5908,6 +6293,14 @@ declare namespace CdvPurchase {
                      *
                      * @optional */
                     applicationUsername?: string | number;
+                    /**
+                     * The obfuscated form of `applicationUsername`, derived by applying
+                     * `store.obfuscator`. The server can use this to correlate obfuscated
+                     * IDs from Apple/Google server notifications (e.g. `appAccountToken`,
+                     * `obfuscatedExternalAccountId`) with the original user.
+                     *
+                     * @optional */
+                    obfuscatedUsername?: string;
                 };
                 /** Microsoft license information */
                 license?: {
@@ -5948,8 +6341,8 @@ declare namespace CdvPurchase {
                 trialPeriodUnit?: SubscriptionPeriodUnit;
                 /** Metadata about the user's device */
                 device?: CdvPurchase.Validator.DeviceInfo;
-                /** List of products available in the store */
-                products: {
+                /** List of products available in the store. Included at most once per day. */
+                products?: {
                     /** Type of product (subscription, consumable, etc.) */
                     type: ProductType;
                     /** Product identifier on the store (unique per platform) */
@@ -5961,7 +6354,7 @@ declare namespace CdvPurchase {
                     }[];
                 }[];
             }
-            type ApiValidatorBodyTransaction = ApiValidatorBodyTransactionApple | ApiValidatorBodyTransactionGoogle | ApiValidatorBodyTransactionWindows | ApiValidatorBodyTransactionBraintree | ApiValidatorBodyTransactionIaptic;
+            type ApiValidatorBodyTransaction = ApiValidatorBodyTransactionApple | ApiValidatorBodyTransactionAppleSK2 | ApiValidatorBodyTransactionGoogle | ApiValidatorBodyTransactionWindows | ApiValidatorBodyTransactionBraintree | ApiValidatorBodyTransactionIaptic;
             interface ApiValidatorBodyTransactionIaptic {
                 type: 'iaptic';
                 /** The backend adapter type (e.g., 'stripe') */
@@ -5983,6 +6376,15 @@ declare namespace CdvPurchase {
                  * @deprecated Use `appStoreReceipt`
                  */
                 transactionReceipt?: never;
+            }
+            /** Transaction type from an Apple device using StoreKit 2 */
+            interface ApiValidatorBodyTransactionAppleSK2 {
+                /** Value `"apple-sk2"` — distinct from `"ios-appstore"` (SK1) */
+                type: 'apple-sk2';
+                /** Product identifier (e.g. "com.example.premium"), NOT the numeric transaction ID */
+                id?: string;
+                /** JWS representation of the transaction from StoreKit 2 */
+                jwsRepresentation: string;
             }
             /** Transaction type from a google powered device  */
             interface ApiValidatorBodyTransactionGoogle {
@@ -6113,6 +6515,8 @@ declare namespace CdvPurchase {
             } & WindowsStore.WindowsSubscription) | ({
                 type: 'ios-appstore';
             } & (AppleAppStore.VerifyReceipt.AppleTransaction | AppleAppStore.VerifyReceipt.AppleVerifyReceiptResponseReceipt)) | ({
+                type: 'apple-sk2';
+            }) | ({
                 type: 'android-playstore';
             } & GooglePlay.PublisherAPI.GooglePurchase) | ({
                 type: 'test';
@@ -6266,5 +6670,12 @@ declare namespace CdvPurchase {
         priceConsentStatus?: PriceConsentStatus;
         /** Last time a subscription was renewed. */
         lastRenewalDate?: number;
+        /**
+         * Quantity of items purchased in a single transaction.
+         *
+         * For consumable products, this value represents the number of items purchased.
+         * For non-consumable products and subscriptions, this value is always 1.
+         */
+        quantity?: number;
     }
 }
